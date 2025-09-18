@@ -1,37 +1,282 @@
+/* Контейнер пагинации */
 .paginationContainer {
   display: flex;
-  justify-content: "center";
-  align-items: "center";
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
   margin: 20px 0;
-  font-family: "Courier New", monospace;
+  padding: 16px;
+  background-color: var(--color-wood-200);
+  border: 2px solid var(--color-wood-400);
+  border-radius: 12px;
+  box-shadow: var(--shadow-medium);
+  position: relative;
 }
 
-.pixelButtonStyle {
-  width: "32px";
-  height: "32px";
-  border: 2px solid #5d4037;
-  background-color: #e8c9a7;
-  color: #5d4037;
-  cursor: pointer;
-  box-shadow: inset 2px 2px 0 rgba(255, 255, 255, 0.2) 2px 2px 0 #5d4037;
-  font-family: inherit;
-  font-size: "16px";
+/* Шестерёнка над пагинацией */
+.paginationContainer::before {
+  content: '⚙️';
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  animation: spin 3s linear infinite;
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+}
+
+/* Информация о страницах */
+.paginationInfo {
   display: flex;
   align-items: center;
   justify-content: center;
-  outline: none;
 }
 
-.pixelButtonStyle :hover {
-  background-color: #d8b997;
+.infoText {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-200);
+  text-align: center;
+  padding: 8px 16px;
+  background-color: var(--color-wood-300);
+  border-radius: 8px;
+  border: 1px solid var(--color-wood-500);
 }
 
-.active {
-  transform: translate(1px, 1px);
-  box-shadow: inset 1px 1px 0 #5d4037;
+/* Основной контейнер пагинации */
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.pixelButtonStyle :disabled {
-  opacity: 0.5;
-  cursor: "not-allowed";
+/* Общие стили кнопок */
+.paginationButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: var(--color-wood-400);
+  border: 2px solid var(--color-wood-600);
+  border-radius: 8px;
+  color: var(--color-text-100);
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.paginationButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.paginationButton:hover::before {
+  left: 100%;
+}
+
+.paginationButton:hover {
+  background-color: var(--color-wood-500);
+  border-color: var(--color-wood-700);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow);
+}
+
+.paginationButton:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-soft);
+}
+
+.paginationButton:disabled {
+  background-color: var(--color-wood-300);
+  border-color: var(--color-wood-500);
+  color: var(--color-text-300);
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+  box-shadow: none;
+}
+
+.paginationButton:disabled::before {
+  display: none;
+}
+
+/* Иконки кнопок */
+.buttonIcon {
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+/* Контейнер номеров страниц */
+.pageNumbers {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Кнопки номеров страниц */
+.pageButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 12px;
+  background-color: var(--color-wood-400);
+  border: 2px solid var(--color-wood-600);
+  border-radius: 8px;
+  color: var(--color-text-100);
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.pageButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.3s ease;
+}
+
+.pageButton:hover::before {
+  left: 100%;
+}
+
+.pageButton:hover {
+  background-color: var(--color-wood-500);
+  border-color: var(--color-wood-700);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-medium);
+}
+
+.pageButton:active {
+  transform: translateY(0);
+}
+
+/* Активная страница */
+.pageButton.active {
+  background-color: var(--color-accent-gold);
+  border-color: var(--color-accent-amber);
+  color: var(--color-mystic-800);
+  font-weight: 900;
+  box-shadow: var(--shadow-glow);
+  position: relative;
+}
+
+/* Убираем старый стиль для активной страницы */
+
+.pageButton.active:hover {
+  background-color: var(--color-accent-amber);
+  transform: translateY(-2px) scale(1.05);
+}
+
+/* Многоточие */
+.dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: var(--color-text-300);
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Анимации */
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.2) rotate(180deg);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: translateX(-50%) rotate(0deg);
+  }
+  to {
+    transform: translateX(-50%) rotate(360deg);
+  }
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .paginationContainer {
+    padding: 12px;
+    gap: 8px;
+  }
+  
+  .paginationButton,
+  .pageButton {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+  }
+  
+  .buttonIcon {
+    font-size: 16px;
+  }
+  
+  .pageButton {
+    font-size: 13px;
+    padding: 0 8px;
+  }
+  
+  .infoText {
+    font-size: 13px;
+    padding: 6px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pagination {
+    gap: 4px;
+  }
+  
+  .pageNumbers {
+    gap: 2px;
+  }
+  
+  .paginationButton,
+  .pageButton {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+  }
+  
+  .buttonIcon {
+    font-size: 14px;
+  }
+  
+  .pageButton {
+    font-size: 12px;
+    padding: 0 6px;
+  }
+  
+  .dots {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
 }

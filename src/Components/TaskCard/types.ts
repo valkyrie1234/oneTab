@@ -8,6 +8,8 @@ export type TaskCardProps = {
     expiredDate: Date | null;
     boardId: number;
     status: DifficultyStatus;
+    isCompleted: boolean;
+    isFailed: boolean;
     reward: {
         gold: number;
         exp: number;

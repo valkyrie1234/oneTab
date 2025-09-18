@@ -1,84 +1,111 @@
-import React, { useState } from "react";
+import React from 'react';
+import styles from './Pagination.module.css';
 
-import styles from "./Pagination.module.css";
-import classNames from "classnames";
-
-type PaginationProps = {
-  totalItems: number;
-  itemsPerPage: number;
+export interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
   onPageChange: (page: number) => void;
-};
+  itemsPerPage?: number;
+  totalItems?: number;
+  showInfo?: boolean;
+}
 
-const Pagination: React.FC<PaginationProps> = ({
-  totalItems,
-  itemsPerPage,
+export const Pagination: React.FC<PaginationProps> = ({
+  currentPage,
+  totalPages,
   onPageChange,
+  itemsPerPage = 10,
+  totalItems = 0,
+  showInfo = true
 }) => {
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-  const [currentPage, setCurrentPage] = useState(1);
+  // Генерируем массив страниц для отображения
+  const getVisiblePages = () => {
+    const delta = 2; // Количество страниц по бокам от текущей
+    const range = [];
+    const rangeWithDots = [];
 
-  const handlePageChange = (page: number) => {
-    if (page < 1 || page > totalPages) return;
-    setCurrentPage(page);
-    onPageChange(page);
-  };
-
-  // Генерация диапазона страниц
-  const getPageNumbers = () => {
-    const pages = [];
-    const maxVisible = 5; // Максимальное видимых номеров
-
-    let start = Math.max(1, currentPage - 2);
-    const end = Math.min(totalPages, start + maxVisible - 1);
-
-    if (end - start < maxVisible - 1) {
-      start = Math.max(1, end - maxVisible + 1);
+    for (let i = Math.max(2, currentPage - delta); i <= Math.min(totalPages - 1, currentPage + delta); i++) {
+      range.push(i);
     }
 
-    for (let i = start; i <= end; i++) {
-      pages.push(i);
+    if (currentPage - delta > 2) {
+      rangeWithDots.push(1, '...');
+    } else {
+      rangeWithDots.push(1);
     }
 
-    return pages;
+    rangeWithDots.push(...range);
+
+    if (currentPage + delta < totalPages - 1) {
+      rangeWithDots.push('...', totalPages);
+    } else if (totalPages > 1) {
+      rangeWithDots.push(totalPages);
+    }
+
+    return rangeWithDots;
   };
+
+  const visiblePages = getVisiblePages();
+  const startItem = (currentPage - 1) * itemsPerPage + 1;
+  const endItem = Math.min(currentPage * itemsPerPage, totalItems);
+
+  if (totalPages <= 1) {
+    return null;
+  }
 
   return (
     <div className={styles.paginationContainer}>
-      {/* Кнопка "Назад" */}
-      <button
-        onClick={() => handlePageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-        className={styles.pixelButtonStyle}
-      >
-        ◀
-      </button>
-
-      {/* Номера страниц */}
-      {getPageNumbers().map((page) => (
+      {showInfo && totalItems > 0 && (
+        <div className={styles.paginationInfo}>
+          <span className={styles.infoText}>
+            Показано {startItem}-{endItem} из {totalItems} задач
+          </span>
+        </div>
+      )}
+      
+      <div className={styles.pagination}>
+        {/* Кнопка "Предыдущая" */}
         <button
-          key={page}
-          onClick={() => handlePageChange(page)}
-          className={classNames([
-            styles.pixelButtonStyle,
-            {
-              [styles.active]: page === currentPage,
-            },
-          ])}
+          className={`${styles.paginationButton} ${styles.prevButton}`}
+          onClick={() => onPageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          aria-label="Предыдущая страница"
         >
-          {page}
+          <span className={styles.buttonIcon}>←</span>
         </button>
-      ))}
 
-      {/* Кнопка "Вперед" */}
-      <button
-        onClick={() => handlePageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
-        className={styles.pixelButtonStyle}
-      >
-        ▶
-      </button>
+        {/* Номера страниц */}
+        <div className={styles.pageNumbers}>
+          {visiblePages.map((page, index) => (
+            <React.Fragment key={index}>
+              {page === '...' ? (
+                <span className={styles.dots}>...</span>
+              ) : (
+                <button
+                  className={`${styles.pageButton} ${
+                    page === currentPage ? styles.active : ''
+                  }`}
+                  onClick={() => onPageChange(page as number)}
+                  aria-label={`Страница ${page}`}
+                  aria-current={page === currentPage ? 'page' : undefined}
+                >
+                  {page}
+                </button>
+              )}
+            </React.Fragment>
+          ))}
+        </div>
+
+        {/* Кнопка "Следующая" */}
+        <button
+          className={`${styles.paginationButton} ${styles.nextButton}`}
+          onClick={() => onPageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          aria-label="Следующая страница"
+        >
+          <span className={styles.buttonIcon}>→</span>
+        </button>
+      </div>
     </div>
   );
 };
-
-export default Pagination;

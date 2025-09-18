@@ -1,15 +1,37 @@
-import React from "react";
+import React, { useState, useMemo } from "react";
 import styles from "./Board.module.css";
 import { IBoard } from "../../store/storeBoards";
 import useTasksStore from "../../store/storeTasks";
 import SmallTaskCard from "../SmallTaskCard/SmallTaskCard";
 import TaskCard from "../TaskCard/TaskCard";
+import { Pagination } from "../../uiKit/Pagination";
 import { useDroppable } from "@dnd-kit/core";
 
 const Board: React.FC<IBoard> = ({ id, title, emoji }) => {
   const task = useTasksStore((state) => state.tasks);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const filteredTAsk = task.filter((task) => task.boardId === id);
+
+  // Настройки пагинации
+  const itemsPerPage = id === 0 ? 5 : 8; // Для All Tasks 5 карточек на странице
+  const totalPages = Math.ceil(filteredTAsk.length / itemsPerPage);
+
+  // Вычисляем задачи для текущей страницы
+  const paginatedTasks = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return filteredTAsk.slice(startIndex, endIndex);
+  }, [filteredTAsk, currentPage, itemsPerPage]);
+
+  // Сбрасываем на первую страницу при изменении фильтра
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [filteredTAsk.length]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   const { setNodeRef, isOver } = useDroppable({ id: id });
 
@@ -28,7 +50,7 @@ const Board: React.FC<IBoard> = ({ id, title, emoji }) => {
 
       <div className={id === 0 ? styles.allTasksGrid : styles.regularBoard}>
         {filteredTAsk?.length > 0 ? (
-          filteredTAsk.map((task) => {
+          paginatedTasks.map((task) => {
             // Для All Tasks показываем полные TaskCard, для остальных досок - SmallTaskCard
             if (id === 0) {
               return (
@@ -42,6 +64,8 @@ const Board: React.FC<IBoard> = ({ id, title, emoji }) => {
                 dateCreate={task.dateCreate}
                 expiredDate={task.expiredDate}
                 boardId={task.boardId}
+                isCompleted={task.isCompleted}
+                isFailed={task.isFailed}
                 />
               );
             } else {
@@ -56,6 +80,8 @@ const Board: React.FC<IBoard> = ({ id, title, emoji }) => {
                   reward={task.reward}
                   dateCreate={task.dateCreate}
                   expiredDate={task.expiredDate}
+                  isCompleted={task.isCompleted}
+                  isFailed={task.isFailed}
                 />
               );
             }
@@ -66,6 +92,18 @@ const Board: React.FC<IBoard> = ({ id, title, emoji }) => {
           </div>
         )}
       </div>
+
+      {/* Пагинация только для All Tasks доски */}
+      {id === 0 && filteredTAsk.length > itemsPerPage && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+          itemsPerPage={itemsPerPage}
+          totalItems={filteredTAsk.length}
+          showInfo={true}
+        />
+      )}
     </div>
   );
 };
