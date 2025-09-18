@@ -17,31 +17,31 @@
 }
 
 .easy{
-  background: linear-gradient(135deg, var(--color-status-100), #00c853);
+  background-color: var(--color-status-100);
   color: var(--color-wood-800);
   border-color: var(--color-wood-700);
 }
 
 .medium{
-  background: linear-gradient(135deg, var(--color-status-200), #ffc107);
+  background-color: var(--color-status-200);
   color: var(--color-wood-800);
   border-color: var(--color-wood-700);
 }
 
 .hard{
-  background: linear-gradient(135deg, var(--color-status-300), #d32f2f);
+  background-color: var(--color-status-300);
   color: var(--color-wood-100);
   border-color: var(--color-wood-700);
 }
 
 .epic{
-  background: linear-gradient(135deg, var(--color-status-400), #9c27b0);
+  background-color: var(--color-status-400);
   color: var(--color-wood-100);
   border-color: var(--color-wood-700);
 }
 
 .completed{
-  background: linear-gradient(135deg, var(--color-status-100), #4caf50);
+  background-color: var(--color-status-100);
   color: var(--color-wood-800);
   border-color: var(--color-wood-700);
 }

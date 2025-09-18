@@ -19,4 +19,30 @@
   --color-status-200: #FFD600;  /* Желтый (предупреждение) */
   --color-status-300: #FF1744;  /* Красный (ошибка) */
   --color-status-400: #D500F9;  /* Фиолетовый (особый статус) */
+
+  /* Новая палитра - мистические цвета */
+  --color-mystic-100: #e8e4ff;  /* Светлый лавандовый (фон) */
+  --color-mystic-200: #d1c7ff;  /* Лавандовый (ховер) */
+  --color-mystic-300: #b8a9ff;  /* Средний лавандовый */
+  --color-mystic-400: #9d88ff;  /* Основной лавандовый */
+  --color-mystic-500: #7c5eff;  /* Яркий лавандовый */
+  --color-mystic-600: #5d3aff;  /* Темный лавандовый */
+  --color-mystic-700: #4c2cdb;  /* Очень темный лавандовый */
+  --color-mystic-800: #3d2199;  /* Лавандовый для теней */
+
+  /* Дополнительные акцентные цвета */
+  --color-accent-gold: #FFD700;   /* Золото */
+  --color-accent-silver: #C0C0C0; /* Серебро */
+  --color-accent-bronze: #CD7F32; /* Бронза */
+  --color-accent-crystal: #87CEEB; /* Кристальный */
+  --color-accent-emerald: #50C878; /* Изумрудный */
+  --color-accent-ruby: #E0115F;    /* Рубиновый */
+  --color-accent-sapphire: #0F52BA; /* Сапфировый */
+  --color-accent-amber: #FFBF00;   /* Янтарный */
+
+  /* Тени и эффекты */
+  --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.15);
+  --shadow-strong: 0 8px 32px rgba(0, 0, 0, 0.2);
+  --shadow-glow: 0 0 20px rgba(157, 136, 255, 0.3);
 }

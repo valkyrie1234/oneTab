@@ -41,7 +41,7 @@ const SmallTaskCard: React.FC<ITasks> = ({ title, id, reward, status, dateCreate
         </div>
         <div className={styles.rewardItem}>
           <span className={styles.rewardIcon}>{setExp(reward.exp)}</span>
-          <span className={styles.rewardValue}>{reward.exp}</span>
+          <span className={styles.expValue}>{reward.exp}</span>
         </div>
       </div>
       

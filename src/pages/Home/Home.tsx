@@ -3,7 +3,7 @@ import styles from "./Home.module.css";
 
 type HomeProps = {};
 
-const Home: React.FC<HomeProps> = ({}) => {
+const Home: React.FC<HomeProps> = () => {
   return (
     <div className={styles.HomePage}>
       {/* Hero Section */}

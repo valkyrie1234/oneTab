@@ -12,8 +12,8 @@ const RewardBar: React.FC<RewardBarProps> = ({gold, exp}) => {
 
   return (
     <div className={styles.rewardBar}>
-      <p>gold: {gold}{setReward(gold)}</p>
-      <p>ex: {exp}{setExp(exp)}</p>
+      <p className={styles.goldReward}>gold: {gold}{setReward(gold)}</p>
+      <p className={styles.expReward}>ex: {exp}{setExp(exp)}</p>
     </div>
   );
 };

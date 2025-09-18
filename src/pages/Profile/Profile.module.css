@@ -3,11 +3,7 @@
 .profilePage {
     min-height: 100%;
     width: 100%;
-    background: linear-gradient(135deg, 
-        var(--color-wood-200) 0%, 
-        var(--color-wood-300) 50%, 
-        var(--color-wood-100) 100%
-    );
+    background-color: var(--color-wood-100);
     padding: 20px;
     box-sizing: border-box;
     position: relative;
@@ -21,10 +17,7 @@
     align-items: center;
     margin-bottom: 30px;
     padding: 20px;
-    background: linear-gradient(135deg, 
-        var(--color-wood-400) 0%, 
-        var(--color-wood-500) 100%
-    );
+    background-color: var(--color-wood-400);
     border-radius: 16px;
     border: 3px solid var(--color-wood-600);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
@@ -75,10 +68,7 @@
 
 /* Карточка игрока */
 .playerCard {
-    background: linear-gradient(135deg, 
-        var(--color-wood-400) 0%, 
-        var(--color-wood-300) 100%
-    );
+    background-color: var(--color-wood-400);
     border-radius: 16px;
     padding: 24px;
     border: 3px solid var(--color-wood-600);
@@ -94,11 +84,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(45deg, 
-        transparent 0%, 
-        rgba(255, 215, 0, 0.1) 50%, 
-        transparent 100%
-    );
+    background-color: rgba(255, 215, 0, 0.1);
     animation: shimmer 4s ease-in-out infinite;
 }
 
@@ -118,7 +104,7 @@
 .playerAvatar {
     width: 80px;
     height: 80px;
-    background: linear-gradient(135deg, #FFD700, #FFA500);
+    background-color: #FFD700;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -240,10 +226,7 @@
 
 /* Карточка ресурсов */
 .resourcesCard {
-    background: linear-gradient(135deg, 
-        var(--color-wood-500) 0%, 
-        var(--color-wood-400) 100%
-    );
+    background-color: var(--color-wood-500);
     border-radius: 16px;
     padding: 24px;
     border: 3px solid var(--color-wood-600);
@@ -294,10 +277,7 @@
 
 /* Карточка достижений */
 .achievementsCard {
-    background: linear-gradient(135deg, 
-        var(--color-wood-400) 0%, 
-        var(--color-wood-300) 100%
-    );
+    background-color: var(--color-wood-400);
     border-radius: 16px;
     padding: 24px;
     border: 3px solid var(--color-wood-600);
@@ -329,10 +309,7 @@
 }
 
 .achievementItem.earned {
-    background: linear-gradient(135deg, 
-        rgba(255, 215, 0, 0.2) 0%, 
-        rgba(255, 215, 0, 0.1) 100%
-    );
+    background-color: rgba(255, 215, 0, 0.2);
     border-color: #FFD700;
 }
 
@@ -364,10 +341,7 @@
 
 /* Карточка активности */
 .recentActivityCard {
-    background: linear-gradient(135deg, 
-        var(--color-wood-500) 0%, 
-        var(--color-wood-400) 100%
-    );
+    background-color: var(--color-wood-500);
     border-radius: 16px;
     padding: 24px;
     border: 3px solid var(--color-wood-600);
