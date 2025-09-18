@@ -16,10 +16,14 @@ type SideBarProps = {
 const SideBar: React.FC<SideBarProps> = ({ links }) => {
   return (
     <aside className={styles.sidebar}>
+      <div className={styles.sidebar__header}>
+        <h1 className={styles.sidebar__title}>⚔️ OneTab</h1>
+        <p className={styles.sidebar__subtitle}>Ваши квесты ждут!</p>
+      </div>
       <nav>
         <ul className={styles.sidebar__list}>
           {links?.map((link) => (
-            <li className={styles.sidebar__item}>
+            <li key={link.path} className={styles.sidebar__item}>
               <NavLink
                 to={link.path}
                 className={({ isActive }) =>

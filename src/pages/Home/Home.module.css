@@ -1,12 +1,323 @@
+/* Import design tokens */
 @import url('../../designToken/designToken.css');
 
 .HomePage {
     height: 100%;
     width: 100%;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-y: auto;
+    background-color: var(--color-wood-100);
+}
+
+/* Hero Section */
+.heroSection {
+    padding: 60px 40px;
+    background-color: var(--color-wood-400);
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+}
+
+.heroContent {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.heroText {
+    color: var(--color-wood-100);
+}
+
+.heroTitle {
+    font-size: 3.5rem;
+    font-weight: 900;
+    margin: 0 0 20px 0;
+    line-height: 1.2;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+.heroAccent {
+    color: #FFD700;
+    text-shadow: 2px 2px 4px rgba(255, 215, 0, 0.5);
+}
+
+.heroSubtitle {
+    font-size: 1.3rem;
+    margin: 0 0 40px 0;
+    line-height: 1.6;
+    opacity: 0.9;
+}
+
+.heroStats {
+    display: flex;
+    gap: 40px;
+}
+
+.statItem {
+    text-align: center;
+    background-color: var(--color-wood-300);
+    padding: 20px;
+    border-radius: 12px;
+    border: 2px solid var(--color-wood-200);
+}
+
+.statNumber {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #FFD700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.statLabel {
+    display: block;
+    font-size: 0.9rem;
+    margin-top: 8px;
+    opacity: 0.8;
+}
+
+.heroImage {
+    position: relative;
+    height: 400px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--color-wood-300);
-    padding: 20px;
-    box-sizing: border-box;
+}
+
+.floatingElements {
+    position: relative;
+    width: 300px;
+    height: 300px;
+}
+
+.floatingIcon {
+    position: absolute;
+    font-size: 3rem;
+    opacity: 0.7;
+    animation: floatIcon 4s ease-in-out infinite;
+}
+
+.floatingIcon:nth-child(1) {
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.floatingIcon:nth-child(2) {
+    top: 60%;
+    right: 20%;
+    animation-delay: 1s;
+}
+
+.floatingIcon:nth-child(3) {
+    bottom: 20%;
+    left: 30%;
+    animation-delay: 2s;
+}
+
+.floatingIcon:nth-child(4) {
+    top: 30%;
+    right: 10%;
+    animation-delay: 3s;
+}
+
+@keyframes floatIcon {
+    0%, 100% { 
+        transform: translateY(0);
+        opacity: 0.7;
+    }
+    50% { 
+        transform: translateY(-15px);
+        opacity: 1;
+    }
+}
+
+/* Section Titles */
+.sectionTitle {
+    font-size: 2.5rem;
+    font-weight: 800;
+    text-align: center;
+    margin: 0 0 50px 0;
+    color: var(--color-wood-800);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Features Section */
+.featuresSection {
+    padding: 80px 40px;
+    background: var(--color-wood-100);
+}
+
+.featuresGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.featureCard {
+    background-color: var(--color-wood-200);
+    padding: 40px 30px;
+    border-radius: 16px;
+    text-align: center;
+    border: 3px solid var(--color-wood-400);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.featureCard:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.featureIcon {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.featureCard:hover .featureIcon {
+    transform: scale(1.1);
+}
+
+.featureTitle {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 15px 0;
+    color: var(--color-wood-800);
+}
+
+.featureDescription {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--color-wood-700);
+    margin: 0;
+}
+
+/* Quick Actions Section */
+.quickActionsSection {
+    padding: 80px 40px;
+    background-color: var(--color-wood-200);
+}
+
+.quickActionsGrid {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.quickActionButton {
+    background-color: var(--color-wood-500);
+    border: 3px solid var(--color-wood-600);
+    border-radius: 12px;
+    padding: 25px 35px;
+    color: var(--color-wood-100);
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    min-width: 180px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.quickActionButton:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.quickActionIcon {
+    font-size: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.quickActionButton:hover .quickActionIcon {
+    transform: scale(1.2);
+}
+
+.quickActionText {
+    font-size: 1rem;
+}
+
+/* Activity Section */
+.activitySection {
+    padding: 80px 40px;
+    background: var(--color-wood-100);
+}
+
+.activityCard {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: var(--color-wood-200);
+    border-radius: 16px;
+    border: 3px solid var(--color-wood-400);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 60px 40px;
+}
+
+.activityEmpty {
+    text-align: center;
+}
+
+.activityEmptyIcon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    opacity: 0.6;
+    animation: pulseIcon 2s ease-in-out infinite;
+}
+
+@keyframes pulseIcon {
+    0%, 100% { 
+        opacity: 0.6;
+        transform: scale(1);
+    }
+    50% { 
+        opacity: 0.8;
+        transform: scale(1.05);
+    }
+}
+
+.activityEmptyText {
+    font-size: 1.2rem;
+    color: var(--color-wood-700);
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .heroContent {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        text-align: center;
+    }
+    
+    .heroTitle {
+        font-size: 2.5rem;
+    }
+    
+    .heroStats {
+        justify-content: center;
+        gap: 20px;
+    }
+    
+    .quickActionsGrid {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .featuresGrid {
+        grid-template-columns: 1fr;
+    }
 }

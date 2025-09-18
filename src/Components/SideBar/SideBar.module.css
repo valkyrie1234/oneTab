@@ -3,46 +3,83 @@
 
 .sidebar {
     position: sticky;
-    top:0;
-    width: 250px;
+    top: 0;
+    width: 280px;
     height: 100vh; 
-    background-color: var(--color-wood-400); /* Темный фон */
-    padding: 20px;
-    border-right: 2px solid var(--color-wood-500);
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-wood-500);
+    padding: 25px;
+    border-right: 3px solid var(--color-wood-700);
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Заголовок сайдбара */
+.sidebar__header {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.sidebar__title {
+    color: var(--color-wood-100);
+    font-size: 1.8rem;
+    font-weight: 900;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    margin: 0;
+    letter-spacing: 1px;
+}
+
+.sidebar__subtitle {
+    color: var(--color-wood-200);
+    font-size: 0.9rem;
+    margin-top: 5px;
+    opacity: 0.8;
 }
 
 /* Стили для списка ссылок */
 .sidebar__list {
-    list-style: none; /* Убираем маркеры списка */
+    list-style: none;
     padding: 0;
     margin: 0;
 }
 
 /* Стили для каждого элемента списка */
 .sidebar__item {
-    margin-bottom: 15px;
+    margin-bottom: 8px;
 }
 
 /* Стили для ссылок */
 .sidebar__link {
-    color: var(--color-text-100); /* Светлый текст */
-    text-decoration: none; /* Убираем подчеркивание */
+    color: var(--color-wood-100);
+    text-decoration: none;
     font-size: 16px;
-    display: block;
-    padding: 10px;
-    border-radius: 4px;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    border: 2px solid transparent;
 }
 
 /* Эффект при наведении на ссылку */
 .sidebar__link:hover {
-    background-color: var(--color-wood-100);
-    color: var(--color-wood-400);
+    background-color: var(--color-wood-400);
+    color: var(--color-wood-50);
 }
 
-/* Активная ссылка (если нужно выделить текущую страницу) */
+/* Активная ссылка */
 .active {
-    background-color: var(--color-wood-100);
-    color: var(--color-wood-400);
+    background-color: var(--color-wood-300);
+    color: var(--color-wood-800);
+    border-color: var(--color-wood-500);
+    font-weight: 700;
+}
+
+/* Декоративные элементы */
+.sidebar::after {
+    content: '⚔️';
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    font-size: 2rem;
+    opacity: 0.3;
 }
