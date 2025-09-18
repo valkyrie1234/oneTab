@@ -6,11 +6,11 @@ import DateBadge from "../../uiKit/DateBadge/DateBadge";
 import ExpiredDateBadge from "../../uiKit/ExpiredDateBadge/ExpiredDateBadge";
 import ProgressBar from "../../uiKit/ProgressBar/ProgressBar";
 import { useDraggable } from "@dnd-kit/core";
-import { ITasks } from "../../store/storeTasks";
+import useTasksStore, { ITasks } from "../../store/storeTasks";
 
 const SmallTaskCard: React.FC<ITasks> = ({ title, id, reward, status, dateCreate, expiredDate, boardId }) => {
   const { setExp, setReward } = useReward();
-
+  const { deleteTask } = useTasksStore();
   const { setNodeRef, listeners, attributes } = useDraggable({ id: id.toString() });
   
   // Debug для досок 1 и 2
@@ -54,7 +54,7 @@ const SmallTaskCard: React.FC<ITasks> = ({ title, id, reward, status, dateCreate
         <ProgressBar expiredDate={expiredDate} />
         <button 
           className={styles.cardDeleteButton}
-          onClick={(e) => e.stopPropagation()}
+          onClick={() => deleteTask(id)}
         >
           ❌
         </button>
