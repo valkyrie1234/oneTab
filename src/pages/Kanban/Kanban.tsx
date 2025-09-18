@@ -46,7 +46,9 @@ const Kanban = () => {
     }
 
     const taskId = active.id as string;
-    const newBoardId = over.id as number;
+    const newBoardId = parseInt(over.id as string);
+    
+    console.log('DragEnd event:', { active: active.id, over: over.id, taskId, newBoardId });
 
     // Перемещаем задачу на новую доску
     if (!isNaN(newBoardId)) {

@@ -33,9 +33,14 @@ const Board: React.FC<IBoard> = ({ id, title, emoji }) => {
     setCurrentPage(page);
   };
 
-  const { setNodeRef, isOver } = useDroppable({ id: id });
+  const { setNodeRef, isOver } = useDroppable({ id: id.toString() });
 
   const className = `${styles.mainBoard} ${id === 0 ? styles.allTasksBoard : ''} ${isOver ? styles.dragOver : ''}`;
+  
+  // Debug для досок 1 и 2
+  if (id === 1 || id === 2) {
+    console.log(`Board ${id}: isOver=${isOver}, className="${className}"`);
+  }
   
   return (
     <div 
@@ -50,7 +55,7 @@ const Board: React.FC<IBoard> = ({ id, title, emoji }) => {
 
       <div className={id === 0 ? styles.allTasksGrid : styles.regularBoard}>
         {filteredTAsk?.length > 0 ? (
-          paginatedTasks.map((task) => {
+          (id === 0 ? paginatedTasks : filteredTAsk).map((task) => {
             // Для All Tasks показываем полные TaskCard, для остальных досок - SmallTaskCard
             if (id === 0) {
               return (

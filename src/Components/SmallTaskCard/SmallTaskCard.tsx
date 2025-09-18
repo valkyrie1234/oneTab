@@ -11,7 +11,12 @@ import { ITasks } from "../../store/storeTasks";
 const SmallTaskCard: React.FC<ITasks> = ({ title, id, reward, status, dateCreate, expiredDate, boardId }) => {
   const { setExp, setReward } = useReward();
 
-  const { setNodeRef, listeners, attributes } = useDraggable({ id: id });
+  const { setNodeRef, listeners, attributes } = useDraggable({ id: id.toString() });
+  
+  // Debug для досок 1 и 2
+  if (boardId === 1 || boardId === 2) {
+    console.log(`SmallTaskCard ${id} on board ${boardId}:`, { id, title, listeners, attributes });
+  }
   
   const handleClick = () => {
     // Обработчик клика для будущих улучшений
@@ -22,7 +27,7 @@ const SmallTaskCard: React.FC<ITasks> = ({ title, id, reward, status, dateCreate
       ref={setNodeRef} 
       {...listeners}
       {...attributes}
-      className={`${styles.smallTaskCardContainer} ${boardId === 4 ? styles.defeat : ""} ${boardId === 3 ? styles.victory : ""}`}
+      className={`${styles.smallTaskCardContainer} ${boardId === 4 ? styles.defeat : ""} ${boardId === 3 ? styles.victory : ""} ${boardId === 1 ? styles.start : ""} ${boardId === 2 ? styles.progress : ""}`}
       onClick={handleClick}
     >
       <div className={styles.smallTaskCardHeader}>

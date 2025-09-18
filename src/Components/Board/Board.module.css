@@ -215,6 +215,42 @@
     border-width: 5px !important;
 }
 
+/* Специфические dragOver стили для каждой доски */
+.mainBoard[data-board-id="0"].dragOver {
+    transform: scale(1.03) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25) !important;
+    border-color: var(--color-wood-800) !important;
+    border-width: 6px !important;
+}
+
+.mainBoard[data-board-id="1"].dragOver {
+    transform: scale(1.03) !important;
+    box-shadow: 0 12px 30px rgba(107, 142, 107, 0.4) !important;
+    border-color: #4A6A4A !important;
+    border-width: 6px !important;
+}
+
+.mainBoard[data-board-id="2"].dragOver {
+    transform: scale(1.03) !important;
+    box-shadow: 0 12px 30px rgba(184, 134, 11, 0.4) !important;
+    border-color: #8A6207 !important;
+    border-width: 6px !important;
+}
+
+.mainBoard[data-board-id="3"].dragOver {
+    transform: scale(1.03) !important;
+    box-shadow: 0 12px 30px rgba(218, 165, 32, 0.4) !important;
+    border-color: #A67C0A !important;
+    border-width: 6px !important;
+}
+
+.mainBoard[data-board-id="4"].dragOver {
+    transform: scale(1.03) !important;
+    box-shadow: 0 12px 30px rgba(112, 128, 144, 0.4) !important;
+    border-color: #708090 !important;
+    border-width: 6px !important;
+}
+
 /* Анимации */
 @keyframes boardShimmer {
     0%, 100% { 

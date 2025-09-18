@@ -22,7 +22,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
 }) => {
   const { deleteTask } = useTasksStore();
 
-  const { setNodeRef, listeners, attributes } = useDraggable({ id: id });
+  const { setNodeRef, listeners, attributes } = useDraggable({ id: id.toString() });
   
   const handleClick = () => {
     // Обработчик клика для будущих улучшений

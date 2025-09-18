@@ -113,6 +113,18 @@ const useTasksStore = create<ITasksStore>((set) => ({
       reward: { gold: 150, exp: 75 }
     },
     {
+      id: "11",
+      title: "Тестовая задача Start",
+      description: "Задача для тестирования доски Start",
+      status: "medium",
+      dateCreate: new Date("2024-01-25T10:00:00"),
+      expiredDate: null,
+      boardId: 1,
+      isCompleted: false,
+      isFailed: false,
+      reward: { gold: 180, exp: 90 }
+    },
+    {
       id: "8",
       title: "Настроить CI/CD",
       description: "Настроить автоматическое тестирование и деплой",
@@ -123,6 +135,18 @@ const useTasksStore = create<ITasksStore>((set) => ({
       isCompleted: false,
       isFailed: false,
       reward: { gold: 600, exp: 300 }
+    },
+    {
+      id: "12",
+      title: "Тестовая задача In Progress",
+      description: "Задача для тестирования доски In Progress",
+      status: "hard",
+      dateCreate: new Date("2024-01-26T14:00:00"),
+      expiredDate: null,
+      boardId: 2,
+      isCompleted: false,
+      isFailed: false,
+      reward: { gold: 250, exp: 125 }
     },
     {
       id: "9",

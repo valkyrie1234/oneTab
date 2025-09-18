@@ -57,6 +57,8 @@ const CreateModal = () => {
       description: description,
       dateCreate: new Date(),
       expiredDate: parsedExpiredDate,
+      isCompleted: false,
+      isFailed: false,
       reward: {
         gold: gold,
         exp: exp,
