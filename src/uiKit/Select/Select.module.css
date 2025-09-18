@@ -1,0 +1,45 @@
+@import url("../../designToken/designToken.css");
+
+.selectContainer {
+  position: relative;
+  width: 300px;
+  margin: 20px;
+}
+
+.select {
+  width: 100%;
+  padding: 12px 16px;
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  color: var(--color-text-200);
+  background-color: var(--color-wood-100);
+  border: 3px solid var(--color-wood-700);
+  border-radius: 0;
+  box-shadow: 4px 4px 0 var(--color-wood-800);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235e3a1e' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 15px;
+}
+
+.select:hover {
+  background-color: var(--color-wood-200);
+}
+
+.select:focus {
+  box-shadow: 2px 2px 0 var(--color-wood-800);
+  transform: translate(2px, 2px);
+}
+
+.select option {
+  background-color: var(--color-wood-100);
+  padding: 8px;
+  cursor: pointer;
+}
+

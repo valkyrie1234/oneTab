@@ -1,0 +1,37 @@
+.paginationContainer {
+  display: flex;
+  justify-content: "center";
+  align-items: "center";
+  margin: 20px 0;
+  font-family: "Courier New", monospace;
+}
+
+.pixelButtonStyle {
+  width: "32px";
+  height: "32px";
+  border: 2px solid #5d4037;
+  background-color: #e8c9a7;
+  color: #5d4037;
+  cursor: pointer;
+  box-shadow: inset 2px 2px 0 rgba(255, 255, 255, 0.2) 2px 2px 0 #5d4037;
+  font-family: inherit;
+  font-size: "16px";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+}
+
+.pixelButtonStyle :hover {
+  background-color: #d8b997;
+}
+
+.active {
+  transform: translate(1px, 1px);
+  box-shadow: inset 1px 1px 0 #5d4037;
+}
+
+.pixelButtonStyle :disabled {
+  opacity: 0.5;
+  cursor: "not-allowed";
+}

@@ -1,0 +1,12 @@
+@import url('../../designToken/designToken.css');
+
+.HomePage {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-wood-300);
+    padding: 20px;
+    box-sizing: border-box;
+}

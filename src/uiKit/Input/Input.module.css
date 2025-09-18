@@ -1,0 +1,40 @@
+@import url('../../designToken/designToken.css');
+
+.inputContainer {
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.inputLabel {
+  display: block;
+  margin-bottom: 6px;
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  font-weight: bolder;
+  color: var(--color-wood-800);
+}
+
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  color: var(--color-text-200);
+  background-color: var(--color-wood-100);
+  border: 3px solid var(--color-wood-700);
+  border-radius: 0;
+  box-shadow: 4px 4px 0 var(--color-wood-800);
+  outline: none;
+  transition: all 0.2s;
+}
+
+.input:focus {
+  box-shadow: 2px 2px 0 var(--color-wood-800);
+  transform: translate(2px, 2px);
+  background-color: var(--color-wood-200);
+}
+
+.input::placeholder {
+  color: var(--color-text-300);
+  opacity: 0.7;
+}

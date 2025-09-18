@@ -1,0 +1,289 @@
+@import url('./../../designToken/designToken.css');
+
+.smallTaskCardContainer {
+    width: 100%;
+    min-height: 120px;
+    border-radius: 8px;
+    background-color: var(--color-wood-500);
+    border: 3px solid var(--color-wood-700);
+    margin: 8px 0;
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    gap: 8px;
+}
+
+
+.smallTaskCardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.dateBadgesRow {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: stretch;
+    width: 100%;
+}
+
+.taskTitle {
+    margin: 0;
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--color-wood-800);
+    word-wrap: break-word;
+    flex: 1;
+    line-height: 1.3;
+}
+
+.smallTaskCardRewardBlock {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.rewardItem {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background-color: var(--color-wood-400);
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--color-wood-600);
+}
+
+.rewardIcon {
+    font-size: 12px;
+}
+
+.rewardValue {
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--color-wood-800);
+}
+
+.smallTaskCardActions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+
+.smallTaskCardContainer:hover {
+  cursor: grab;
+  border-color: var(--color-wood-500);
+  background-color: var(--color-wood-200);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+}
+
+.smallTaskCardContainer:active {
+  cursor: grabbing;
+  transform: scale(1.02);
+  transition: transform 0.2s ease;
+}
+
+.cardDeleteButton {
+  background: inherit;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px;
+  border-radius: 3px;
+  transition: background-color 0.2s ease;
+}
+
+.cardDeleteButton:hover {
+  background-color: var(--color-wood-300);
+}
+
+/* Поврежденные стили для маленьких карточек в defeat */
+.smallTaskCardContainer.defeat {
+    background-color: var(--color-wood-700);
+    border-color: var(--color-wood-800);
+    filter: grayscale(0.3) brightness(0.8);
+    transform: rotate(-1deg);
+    box-shadow: 0 2px 8px rgba(139, 69, 19, 0.3);
+    position: relative;
+    overflow: visible;
+}
+
+.smallTaskCardContainer.defeat::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    background: linear-gradient(45deg, 
+        transparent 0%, 
+        rgba(139, 69, 19, 0.1) 25%, 
+        transparent 50%, 
+        rgba(139, 69, 19, 0.1) 75%, 
+        transparent 100%
+    );
+    border-radius: 15px;
+    z-index: -1;
+    animation: damageGlow 3s ease-in-out infinite;
+}
+
+.smallTaskCardContainer.defeat::after {
+    content: '💀';
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    font-size: 16px;
+    background: var(--color-wood-800);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--color-wood-600);
+    animation: skullFloat 2s ease-in-out infinite;
+}
+
+.smallTaskCardContainer.defeat .smallTaskCardHeader {
+    background-color: var(--color-wood-800);
+    border-color: var(--color-wood-700);
+    text-decoration: line-through;
+}
+
+.smallTaskCardContainer.defeat .taskTitle {
+    color: var(--color-wood-400);
+    opacity: 0.7;
+    text-decoration: line-through;
+}
+
+.smallTaskCardContainer.defeat .smallTaskCardRewardBlock {
+    background-color: var(--color-wood-600);
+    border-color: var(--color-wood-700);
+    opacity: 0.8;
+}
+
+.smallTaskCardContainer.defeat .rewardValue {
+    color: var(--color-wood-300);
+    text-decoration: line-through;
+}
+
+.smallTaskCardContainer.defeat .cardDeleteButton {
+    background-color: var(--color-wood-600);
+    color: var(--color-wood-300);
+}
+
+@keyframes damageGlow {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.6; }
+}
+
+@keyframes skullFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-3px) rotate(3deg); }
+}
+
+/* Победные стили для маленьких карточек в victory */
+.smallTaskCardContainer.victory {
+    background: linear-gradient(135deg, 
+        var(--color-wood-300) 0%, 
+        var(--color-wood-200) 50%, 
+        var(--color-wood-100) 100%
+    );
+    border-color: var(--color-wood-400);
+    filter: brightness(1.1) saturate(1.2);
+    transform: rotate(0.5deg);
+    box-shadow: 0 4px 16px rgba(255, 215, 0, 0.3);
+    position: relative;
+    overflow: visible;
+}
+
+.smallTaskCardContainer.victory::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    background: linear-gradient(45deg, 
+        transparent 0%, 
+        rgba(255, 215, 0, 0.1) 25%, 
+        transparent 50%, 
+        rgba(255, 215, 0, 0.1) 75%, 
+        transparent 100%
+    );
+    border-radius: 15px;
+    z-index: -1;
+    animation: victoryGlow 3s ease-in-out infinite;
+}
+
+.smallTaskCardContainer.victory::after {
+    content: '👑';
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    font-size: 20px;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--color-wood-400);
+    animation: crownFloat 2s ease-in-out infinite;
+    box-shadow: 0 3px 6px rgba(255, 215, 0, 0.4);
+}
+
+.smallTaskCardContainer.victory .smallTaskCardHeader {
+    background: linear-gradient(135deg, 
+        var(--color-wood-400) 0%, 
+        var(--color-wood-300) 100%
+    );
+    border-color: var(--color-wood-500);
+    box-shadow: inset 0 1px 3px rgba(255, 215, 0, 0.2);
+}
+
+.smallTaskCardContainer.victory .taskTitle {
+    color: var(--color-wood-800);
+    text-shadow: 1px 1px 2px rgba(255, 215, 0, 0.3);
+    font-weight: 900;
+}
+
+.smallTaskCardContainer.victory .smallTaskCardRewardBlock {
+    background: linear-gradient(135deg, 
+        var(--color-wood-100) 0%, 
+        var(--color-wood-200) 100%
+    );
+    border-color: var(--color-wood-300);
+    box-shadow: inset 0 1px 2px rgba(255, 215, 0, 0.1);
+}
+
+.smallTaskCardContainer.victory .rewardValue {
+    color: var(--color-wood-700);
+    font-weight: 900;
+}
+
+.smallTaskCardContainer.victory .cardDeleteButton {
+    background-color: var(--color-wood-200);
+    color: var(--color-wood-700);
+}
+
+.smallTaskCardContainer.victory .cardDeleteButton:hover {
+    background-color: var(--color-wood-300);
+    transform: scale(1.1);
+}
+
+@keyframes victoryGlow {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.7; }
+}
+
+@keyframes crownFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-6px) rotate(-3deg); }
+}

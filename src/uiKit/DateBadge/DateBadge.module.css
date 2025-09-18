@@ -1,0 +1,25 @@
+@import url('../../designToken/designToken.css');
+
+.dateBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background-color: var(--color-wood-200);
+  border: 2px solid var(--color-wood-500);
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: bold;
+  color: var(--color-text-200);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+}
+
+.calendarIcon {
+  font-size: 12px;
+  filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.2));
+}
+
+.dateText {
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}

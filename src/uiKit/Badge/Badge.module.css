@@ -1,0 +1,47 @@
+@import url('../../designToken/designToken.css');
+
+.badge {
+  padding: 2px 8px;
+  border: 2px solid var(--color-wood-800);
+  border-radius: 12px;
+  user-select: none;
+  font-size: 10px;
+  font-weight: bold;
+  min-width: 24px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.easy{
+  background: linear-gradient(135deg, var(--color-status-100), #00c853);
+  color: var(--color-wood-800);
+  border-color: var(--color-wood-700);
+}
+
+.medium{
+  background: linear-gradient(135deg, var(--color-status-200), #ffc107);
+  color: var(--color-wood-800);
+  border-color: var(--color-wood-700);
+}
+
+.hard{
+  background: linear-gradient(135deg, var(--color-status-300), #d32f2f);
+  color: var(--color-wood-100);
+  border-color: var(--color-wood-700);
+}
+
+.epic{
+  background: linear-gradient(135deg, var(--color-status-400), #9c27b0);
+  color: var(--color-wood-100);
+  border-color: var(--color-wood-700);
+}
+
+.completed{
+  background: linear-gradient(135deg, var(--color-status-100), #4caf50);
+  color: var(--color-wood-800);
+  border-color: var(--color-wood-700);
+}

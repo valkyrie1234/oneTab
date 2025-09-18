@@ -1,0 +1,48 @@
+/* Базовые стили для SideBar */
+@import url('../../designToken/designToken.css');
+
+.sidebar {
+    position: sticky;
+    top:0;
+    width: 250px;
+    height: 100vh; 
+    background-color: var(--color-wood-400); /* Темный фон */
+    padding: 20px;
+    border-right: 2px solid var(--color-wood-500);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Стили для списка ссылок */
+.sidebar__list {
+    list-style: none; /* Убираем маркеры списка */
+    padding: 0;
+    margin: 0;
+}
+
+/* Стили для каждого элемента списка */
+.sidebar__item {
+    margin-bottom: 15px;
+}
+
+/* Стили для ссылок */
+.sidebar__link {
+    color: var(--color-text-100); /* Светлый текст */
+    text-decoration: none; /* Убираем подчеркивание */
+    font-size: 16px;
+    display: block;
+    padding: 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Эффект при наведении на ссылку */
+.sidebar__link:hover {
+    background-color: var(--color-wood-100);
+    color: var(--color-wood-400);
+}
+
+/* Активная ссылка (если нужно выделить текущую страницу) */
+.active {
+    background-color: var(--color-wood-100);
+    color: var(--color-wood-400);
+}

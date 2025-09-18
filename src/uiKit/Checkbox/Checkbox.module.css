@@ -1,0 +1,18 @@
+@import url('../../designToken/designToken.css');
+
+.checkboxLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  position: relative;
+  background-color: var(--color-wood-300);
+  border: 2px solid var(--color-wood-700);
+  box-shadow: inset 2px 2px 0 rgba(255, 255, 255, 0.2), 1px 1px 0 var(--color-wood-700);
+}

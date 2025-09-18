@@ -1,0 +1,280 @@
+@import url("../../designToken/designToken.css");
+
+.taskCard {
+  width: 280px;
+  min-height: 320px;
+  background-color: var(--color-wood-500);
+  border: 3px solid var(--color-wood-700);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.taskCardHeader {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  background-color: var(--color-wood-600);
+  border-radius: 12px;
+  border: 2px solid var(--color-wood-700);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.taskCardHeader p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--color-text-100);
+  line-height: 1.4;
+  word-wrap: break-word;
+  flex: 1;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.dateBadgesRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+
+.cardContent {
+  flex: 1;
+  padding: 12px;
+  background-color: var(--color-wood-200);
+  border-radius: 8px;
+  border: 1px solid var(--color-wood-400);
+  color: var(--color-text-200);
+  font-size: 14px;
+  line-height: 1.5;
+  word-wrap: break-word;
+  min-height: 80px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.cardActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  width: 100%;
+}
+
+.cardDeleteButton {
+  background: inherit;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.cardDeleteButton:hover {
+  background-color: var(--color-wood-200);
+}
+
+.taskCard:hover {
+  cursor: grab;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+  border-color: var(--color-wood-600);
+}
+
+.taskCard:active {
+  cursor: grabbing;
+  transform: translateY(-2px) rotate(2deg);
+  transition: transform 0.1s ease;
+}
+
+/* Поврежденные стили для карточек в defeat */
+.taskCard.defeat {
+  background-color: var(--color-wood-700);
+  border-color: var(--color-wood-800);
+  filter: grayscale(0.3) brightness(0.8);
+  transform: rotate(-2deg);
+  box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3);
+  position: relative;
+  overflow: visible;
+}
+
+.taskCard.defeat::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  background: linear-gradient(45deg, 
+    transparent 0%, 
+    rgba(139, 69, 19, 0.1) 25%, 
+    transparent 50%, 
+    rgba(139, 69, 19, 0.1) 75%, 
+    transparent 100%
+  );
+  border-radius: 20px;
+  z-index: -1;
+  animation: damageGlow 3s ease-in-out infinite;
+}
+
+.taskCard.defeat::after {
+  content: '💀';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  font-size: 20px;
+  background: var(--color-wood-800);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--color-wood-600);
+  animation: skullFloat 2s ease-in-out infinite;
+}
+
+.taskCard.defeat .taskCardHeader {
+  background-color: var(--color-wood-800);
+  border-color: var(--color-wood-700);
+  text-decoration: line-through;
+}
+
+.taskCard.defeat .taskCardHeader p {
+  color: var(--color-wood-400);
+  opacity: 0.7;
+}
+
+.taskCard.defeat .cardContent {
+  background-color: var(--color-wood-600);
+  border-color: var(--color-wood-700);
+  color: var(--color-wood-300);
+  opacity: 0.8;
+  text-decoration: line-through;
+}
+
+.taskCard.defeat .cardDeleteButton {
+  background-color: var(--color-wood-600);
+  color: var(--color-wood-300);
+}
+
+@keyframes damageGlow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes skullFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-5px) rotate(5deg); }
+}
+
+/* Победные стили для карточек в victory */
+.taskCard.victory {
+  background: linear-gradient(135deg, 
+    var(--color-wood-300) 0%, 
+    var(--color-wood-200) 50%, 
+    var(--color-wood-100) 100%
+  );
+  border-color: var(--color-wood-400);
+  filter: brightness(1.1) saturate(1.2);
+  transform: rotate(1deg);
+  box-shadow: 0 8px 24px rgba(255, 215, 0, 0.3);
+  position: relative;
+  overflow: visible;
+}
+
+.taskCard.victory::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  background: linear-gradient(45deg, 
+    transparent 0%, 
+    rgba(255, 215, 0, 0.1) 25%, 
+    transparent 50%, 
+    rgba(255, 215, 0, 0.1) 75%, 
+    transparent 100%
+  );
+  border-radius: 20px;
+  z-index: -1;
+  animation: victoryGlow 3s ease-in-out infinite;
+}
+
+.taskCard.victory::after {
+  content: '👑';
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  font-size: 24px;
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid var(--color-wood-400);
+  animation: crownFloat 2s ease-in-out infinite;
+  box-shadow: 0 4px 8px rgba(255, 215, 0, 0.4);
+}
+
+.taskCard.victory .taskCardHeader {
+  background: linear-gradient(135deg, 
+    var(--color-wood-400) 0%, 
+    var(--color-wood-300) 100%
+  );
+  border-color: var(--color-wood-500);
+  box-shadow: inset 0 2px 4px rgba(255, 215, 0, 0.2);
+}
+
+.taskCard.victory .taskCardHeader p {
+  color: var(--color-wood-800);
+  text-shadow: 1px 1px 2px rgba(255, 215, 0, 0.3);
+  font-weight: 900;
+}
+
+.taskCard.victory .cardContent {
+  background: linear-gradient(135deg, 
+    var(--color-wood-100) 0%, 
+    var(--color-wood-200) 100%
+  );
+  border-color: var(--color-wood-300);
+  color: var(--color-wood-700);
+  box-shadow: inset 0 1px 3px rgba(255, 215, 0, 0.1);
+}
+
+.taskCard.victory .cardDeleteButton {
+  background-color: var(--color-wood-200);
+  color: var(--color-wood-700);
+}
+
+.taskCard.victory .cardDeleteButton:hover {
+  background-color: var(--color-wood-300);
+  transform: scale(1.1);
+}
+
+@keyframes victoryGlow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes crownFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(-5deg); }
+}

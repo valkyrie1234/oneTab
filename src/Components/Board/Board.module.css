@@ -1,0 +1,284 @@
+.mainBoard{
+    padding: 15px;
+    width: 23%;
+    min-height: 400px;
+    border-radius: 16px;
+    border: 4px solid var(--color-wood-600);
+    background-color: var(--color-wood-400);
+    box-sizing: border-box;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+.mainBoard::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.1) 50%, 
+        transparent 100%
+    );
+    opacity: 0.3;
+    animation: boardShimmer 6s ease-in-out infinite;
+}
+
+/* Специальные стили для разных досок */
+.mainBoard[data-board-id="0"] {
+    background-color: var(--color-wood-500);
+    border-color: var(--color-wood-700);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+}
+
+.mainBoard[data-board-id="1"] {
+    background-color: #6B8E6B;
+    border-color: #5A7A5A;
+    box-shadow: 0 8px 24px rgba(107, 142, 107, 0.2);
+}
+
+.mainBoard[data-board-id="2"] {
+    background-color: #B8860B;
+    border-color: #9A7209;
+    box-shadow: 0 8px 24px rgba(184, 134, 11, 0.2);
+}
+
+.mainBoard[data-board-id="3"] {
+    background-color: #DAA520;
+    border-color: #B8860B;
+    box-shadow: 0 8px 24px rgba(218, 165, 32, 0.25);
+}
+
+.mainBoard[data-board-id="4"] {
+    background-color: #708090;
+    border-color: #5F6A6A;
+    box-shadow: 0 8px 24px rgba(112, 128, 144, 0.2);
+}
+
+/* Стили для All Tasks - большая доска */
+.allTasksBoard {
+  width: 100% !important;
+  min-height: 350px;
+  margin-bottom: 0;
+}
+
+.allTasksBoard .mainBoardHeader {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* Сетка для задач в All Tasks */
+.allTasksGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 15px;
+  padding: 10px 0;
+}
+
+/* Обычные доски - вертикальное расположение */
+.regularBoard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 300px;
+}
+
+/* Пустые доски */
+.emptyBoard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: rgba(0, 0, 0, 0.5);
+  font-style: italic;
+  font-size: 1.1rem;
+  text-align: center;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  border: 2px dashed rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 1;
+}
+
+.emptyBoard::before {
+  content: '📋';
+  font-size: 2rem;
+  margin-bottom: 10px;
+  opacity: 0.6;
+  animation: float 3s ease-in-out infinite;
+}
+
+.mainBoard[data-board-id="1"] .emptyBoard::before {
+  content: '🎯';
+}
+
+.mainBoard[data-board-id="2"] .emptyBoard::before {
+  content: '⚔️';
+}
+
+.mainBoard[data-board-id="3"] .emptyBoard::before {
+  content: '🏆';
+}
+
+.mainBoard[data-board-id="4"] .emptyBoard::before {
+  content: '💀';
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .mainBoard {
+    width: 100% !important;
+    margin-bottom: 20px;
+  }
+  
+  .allTasksBoard {
+    width: 100% !important;
+  }
+  
+  .allTasksGrid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+  .mainBoardHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    width: 100%;
+    min-height: 60px;
+    border-radius: 12px 12px 0 0;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-bottom: 3px solid rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 1;
+    margin-bottom: 15px;
+  }
+
+.mainBoardHeader p {
+    margin: 0;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    text-transform: capitalize;
+}
+
+/* Специальные цвета заголовков для разных досок */
+.mainBoard[data-board-id="0"] .mainBoardHeader p {
+    color: var(--color-wood-800);
+}
+
+.mainBoard[data-board-id="1"] .mainBoardHeader p {
+    color: #2F4F2F;
+}
+
+.mainBoard[data-board-id="2"] .mainBoardHeader p {
+    color: #8B6914;
+}
+
+.mainBoard[data-board-id="3"] .mainBoardHeader p {
+    color: #B8860B;
+}
+
+.mainBoard[data-board-id="4"] .mainBoardHeader p {
+    color: #2F4F4F;
+}
+
+/* Hover эффекты для досок */
+.mainBoard:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.mainBoard[data-board-id="1"]:hover {
+    box-shadow: 0 8px 20px rgba(107, 142, 107, 0.25);
+}
+
+.mainBoard[data-board-id="2"]:hover {
+    box-shadow: 0 8px 20px rgba(184, 134, 11, 0.25);
+}
+
+.mainBoard[data-board-id="3"]:hover {
+    box-shadow: 0 8px 20px rgba(218, 165, 32, 0.3);
+}
+
+.mainBoard[data-board-id="4"]:hover {
+    box-shadow: 0 8px 20px rgba(112, 128, 144, 0.25);
+}
+
+.dragOver {
+    transform: scale(1.03) !important;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2) !important;
+    border-width: 5px !important;
+}
+
+/* Анимации */
+@keyframes boardShimmer {
+    0%, 100% { 
+        opacity: 0.3;
+        transform: translateX(-100%);
+    }
+    50% { 
+        opacity: 0.6;
+        transform: translateX(100%);
+    }
+}
+
+/* Декоративные элементы для досок */
+.mainBoard::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    animation: pulse 4s ease-in-out infinite;
+}
+
+.mainBoard[data-board-id="1"]::after {
+    background: rgba(107, 142, 107, 0.3);
+}
+
+.mainBoard[data-board-id="2"]::after {
+    background: rgba(184, 134, 11, 0.3);
+}
+
+.mainBoard[data-board-id="3"]::after {
+    background: rgba(218, 165, 32, 0.35);
+}
+
+.mainBoard[data-board-id="4"]::after {
+    background: rgba(112, 128, 144, 0.3);
+}
+
+@keyframes pulse {
+    0%, 100% { 
+        transform: scale(1);
+        opacity: 0.3;
+    }
+    50% { 
+        transform: scale(1.1);
+        opacity: 0.6;
+    }
+}
+
+@keyframes float {
+    0%, 100% { 
+        transform: translateY(0);
+    }
+    50% { 
+        transform: translateY(-10px);
+    }
+}
+
+  
