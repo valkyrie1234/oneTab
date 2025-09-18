@@ -186,7 +186,6 @@ const useTasksStore = create<ITasksStore>((set) => ({
             return { 
               ...task, 
               boardId: newBoardId,
-              reward: { gold: 0, exp: 0 },
               isFailed: true,
             };
           }
@@ -194,7 +193,6 @@ const useTasksStore = create<ITasksStore>((set) => ({
             return { 
               ...task, 
               boardId: newBoardId,
-              reward: { gold: 0, exp: 0 },
               isFailed: false,
               isCompleted: true,
             };
