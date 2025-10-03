@@ -14,9 +14,9 @@ interface PrivateRouteProps {
 const PrivateRoute = ({ children, requiredRole, allowedRoles }: PrivateRouteProps) => {
   const { isAuthenticated, user } = useAuthStore();
 
-  // Если не аутентифицирован - редирект на логин
+  // Если не аутентифицирован - редирект на главную
   if (!isAuthenticated || !user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" replace />;
   }
 
   // Проверка конкретной роли

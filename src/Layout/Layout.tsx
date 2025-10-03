@@ -1,6 +1,5 @@
 import React, { ReactNode } from "react";
 import SideBar from "../Components/SideBar/SideBar";
-import { sidebarRoutes } from "../routes/consts";
 
 type LayoutProps = {
   children: ReactNode;
@@ -14,7 +13,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       width: "100%",
       overflow: "hidden"
     }}>
-      <SideBar links={sidebarRoutes}/>
+      <SideBar />
       <div style={{
         flex: 1,
         height: "100%",

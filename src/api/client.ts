@@ -155,6 +155,19 @@ export const BoardsAPI = {
 };
 
 /**
+ * Users API
+ */
+export const UsersAPI = {
+  async getProfile(userId: string) {
+    return APIClient.get(`/api/users/${userId}`);
+  },
+
+  async getStats(userId: string) {
+    return APIClient.get(`/api/users/${userId}/stats`);
+  },
+};
+
+/**
  * Tasks API
  */
 export const TasksAPI = {

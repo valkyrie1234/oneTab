@@ -3,10 +3,10 @@ import useTasksStore from '../store/storeTasks';
 
 /**
  * Хук для автоматической проверки просроченных задач
- * Проверяет каждые 30 секунд и перемещает просроченные задачи в defeat
+ * Проверяет каждую минуту и помечает просроченные задачи
  */
 const useExpiredTasksChecker = () => {
-  const { checkExpiredTasks } = useTasksStore();
+  const checkExpiredTasks = useTasksStore((state) => state.checkExpiredTasks);
 
   useEffect(() => {
     // Проверяем сразу при монтировании
@@ -15,13 +15,13 @@ const useExpiredTasksChecker = () => {
     // Устанавливаем интервал для периодической проверки
     const interval = setInterval(() => {
       checkExpiredTasks();
-    }, 30000); // Проверяем каждые 30 секунд
+    }, 60000); // Проверяем каждую минуту (не каждые 30 секунд!)
 
     // Очищаем интервал при размонтировании
     return () => {
       clearInterval(interval);
     };
-  }, [checkExpiredTasks]);
+  }, []); // Пустой массив - функция checkExpiredTasks стабильна в Zustand
 };
 
 export default useExpiredTasksChecker;

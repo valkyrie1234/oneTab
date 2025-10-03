@@ -1,26 +1,23 @@
-import React, { ReactNode } from "react";
+import React, { useMemo } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/storeAuth";
+import { getSidebarRoutes } from "../../routes/consts";
 import styles from "./SideBar.module.css";
 import classNames from "classnames";
 
-type TLink = {
-  label: string;
-  path: string;
-  element: ReactNode;
-};
-
-type SideBarProps = {
-  links?: TLink[];
-};
-
-const SideBar: React.FC<SideBarProps> = ({ links }) => {
-  const { user, logout } = useAuthStore();
+const SideBar: React.FC = () => {
+  const { user, logout, isAuthenticated } = useAuthStore();
   const navigate = useNavigate();
+
+  // Получаем маршруты в зависимости от авторизации и роли
+  const links = useMemo(() => 
+    getSidebarRoutes(isAuthenticated, user?.role), 
+    [isAuthenticated, user?.role]
+  );
 
   const handleLogout = () => {
     logout();
-    navigate("/login");
+    navigate("/");
   };
 
   const getRoleEmoji = (role: string) => {
@@ -57,7 +54,7 @@ const SideBar: React.FC<SideBarProps> = ({ links }) => {
 
       <nav>
         <ul className={styles.sidebar__list}>
-          {links?.map((link) => (
+          {links.map((link) => (
             <li key={link.path} className={styles.sidebar__item}>
               <NavLink
                 to={link.path}
@@ -71,38 +68,6 @@ const SideBar: React.FC<SideBarProps> = ({ links }) => {
               </NavLink>
             </li>
           ))}
-
-          {/* Админ панель */}
-          {user?.role === "ADMIN" && (
-            <li className={styles.sidebar__item}>
-              <NavLink
-                to="/admin"
-                className={({ isActive }) =>
-                  isActive
-                    ? classNames([styles.sidebar__link, styles.active])
-                    : styles.sidebar__link
-                }
-              >
-                👑 Админ панель
-              </NavLink>
-            </li>
-          )}
-
-          {/* Панель модератора */}
-          {(user?.role === "MODERATOR" || user?.role === "ADMIN") && (
-            <li className={styles.sidebar__item}>
-              <NavLink
-                to="/moderator"
-                className={({ isActive }) =>
-                  isActive
-                    ? classNames([styles.sidebar__link, styles.active])
-                    : styles.sidebar__link
-                }
-              >
-                🛡️ Панель модератора
-              </NavLink>
-            </li>
-          )}
         </ul>
       </nav>
 

@@ -12,67 +12,98 @@ import PrivateRoute from "./PrivateRoute";
 
 // Основные маршруты для приложения
 export const routes = [
-  // Публичные роуты (Auth)
+  // Публичные роуты
+  {
+    path: "/",
+    element: <Layout><Home /></Layout>,
+    label: "🏰 Таверна",
+    isPublic: true,
+    showInSidebar: true
+  },
   {
     path: "/login",
-    element: <Login />,
-    label: "Вход",
-    isPublic: true
+    element: <Layout><Login /></Layout>,
+    label: "🚪 Авторизация",
+    isPublic: true,
+    showInSidebar: true,
+    authOnly: true  // Показывать только неавторизованным
   },
   {
     path: "/register",
-    element: <Register />,
-    label: "Регистрация",
-    isPublic: true
+    element: <Layout><Register /></Layout>,
+    label: "✨ Регистрация",
+    isPublic: true,
+    showInSidebar: true,
+    authOnly: true  // Показывать только неавторизованным
   },
   
   // Защищенные роуты (требуют аутентификацию)
   {
-    path: "/",
-    element: <PrivateRoute><Layout><Home /></Layout></PrivateRoute>,
-    label: "Таверна"
-  },
-  {
     path: "/kanban",
     element: <PrivateRoute><Layout><Kanban /></Layout></PrivateRoute>,
-    label: "Карта приключений"
+    label: "🗺️ Карта приключений",
+    showInSidebar: true
   },
   {
     path: "/create",
     element: <PrivateRoute><Layout><Create /></Layout></PrivateRoute>,
-    label: "Создать квест"
+    label: "➕ Создать квест",
+    showInSidebar: true
   },
   {
     path: "/profile",
     element: <PrivateRoute><Layout><Profile /></Layout></PrivateRoute>,
-    label: "Профиль героя"
+    label: "👤 Профиль героя",
+    showInSidebar: true
   },
   
   // Роуты для ADMIN
   {
     path: "/admin",
-    element: <PrivateRoute requiredRole="ADMIN"><Admin /></PrivateRoute>,
-    label: "Админ панель",
-    adminOnly: true
+    element: <PrivateRoute requiredRole="ADMIN"><Layout><Admin /></Layout></PrivateRoute>,
+    label: "👑 Админ панель",
+    adminOnly: true,
+    showInSidebar: true
   },
   
   // Роуты для MODERATOR и ADMIN
   {
     path: "/moderator",
-    element: <PrivateRoute allowedRoles={["MODERATOR", "ADMIN"]}><Moderator /></PrivateRoute>,
-    label: "Панель модератора",
-    moderatorOnly: true
+    element: <PrivateRoute allowedRoles={["MODERATOR", "ADMIN"]}><Layout><Moderator /></Layout></PrivateRoute>,
+    label: "🛡️ Панель модератора",
+    moderatorOnly: true,
+    showInSidebar: true
   },
   
   // 404
   {
     path: "*",
-    element: <NotFound />,
+    element: <Layout><NotFound /></Layout>,
     label: "Страница не найдена"
   },
 ];
 
-// Маршруты для сайдбара (без страницы 404 и без auth страниц)
-export const sidebarRoutes = routes.filter(
-  route => route.path !== "*" && !route.isPublic && !route.adminOnly && !route.moderatorOnly
-);
+// Функция для получения маршрутов для сайдбара в зависимости от авторизации
+export const getSidebarRoutes = (isAuthenticated: boolean, userRole?: "USER" | "ADMIN" | "MODERATOR") => {
+  return routes.filter(route => {
+    // Скрываем 404
+    if (route.path === "*") return false;
+    
+    // Не показываем в сайдбаре если нет флага
+    if (!route.showInSidebar) return false;
+    
+    // Если не авторизован - показываем только публичные и authOnly
+    if (!isAuthenticated) {
+      return route.isPublic;
+    }
+    
+    // Если авторизован - скрываем authOnly роуты (login/register)
+    if (route.authOnly) return false;
+    
+    // Проверка прав для админ/модератор роутов
+    if (route.adminOnly && userRole !== "ADMIN") return false;
+    if (route.moderatorOnly && userRole !== "MODERATOR" && userRole !== "ADMIN") return false;
+    
+    return true;
+  });
+};

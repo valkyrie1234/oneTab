@@ -29,13 +29,6 @@ const Kanban = () => {
   const allTasksBoard = boards.find(b => b.name === 'all tasks');
   const otherBoards = boards.filter(b => b.name !== 'all tasks').sort((a, b) => a.order - b.order);
   
-  // Debug
-  React.useEffect(() => {
-    console.log('📋 Kanban render - Boards count:', boards.length);
-    console.log('📋 All Tasks board:', allTasksBoard);
-    console.log('📋 Other boards:', otherBoards);
-  }, [boards]);
-  
   // Автоматически проверяем просроченные задачи
   useExpiredTasksChecker();
 

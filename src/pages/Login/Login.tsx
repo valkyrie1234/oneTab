@@ -30,14 +30,8 @@ const Login = () => {
         localStorage.setItem("accessToken", tokens.accessToken);
         localStorage.setItem("refreshToken", tokens.refreshToken);
 
-        // Редирект в зависимости от роли
-        if (user.role === "ADMIN") {
-          navigate("/admin");
-        } else if (user.role === "MODERATOR") {
-          navigate("/moderator");
-        } else {
-          navigate("/");
-        }
+        // Редирект на главную (там будет правильный контент для роли)
+        navigate("/");
       } else {
         setError(response.error || "Ошибка входа");
       }
