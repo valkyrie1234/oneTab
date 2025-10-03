@@ -7,14 +7,21 @@ import TaskCard from "../TaskCard/TaskCard";
 import { Pagination } from "../../uiKit/Pagination";
 import { useDroppable } from "@dnd-kit/core";
 
-const Board: React.FC<IBoard> = ({ id, title, emoji }) => {
+const Board: React.FC<IBoard & { title?: string }> = ({ id, title, name, emoji }) => {
   const task = useTasksStore((state) => state.tasks);
   const [currentPage, setCurrentPage] = useState(1);
+  
+  // Используем title (если передан) или name
+  const boardName = title || name;
 
-  const filteredTAsk = task.filter((task) => task.boardId === id);
+  // Для "all tasks" показываем только задачи БЕЗ доски (boardId === null или undefined)
+  // Для остальных досок - фильтруем по boardId
+  const filteredTAsk = boardName === 'all tasks' 
+    ? task.filter((task) => !task.boardId || task.boardId === id)
+    : task.filter((task) => task.boardId === id);
 
-  // Настройки пагинации
-  const itemsPerPage = id === 0 ? 5 : 8; // Для All Tasks 5 карточек на странице
+  // Настройки пагинации (для "all tasks" 5 карточек)
+  const itemsPerPage = boardName === 'all tasks' ? 5 : 8;
   const totalPages = Math.ceil(filteredTAsk.length / itemsPerPage);
 
   // Вычисляем задачи для текущей страницы
@@ -33,73 +40,64 @@ const Board: React.FC<IBoard> = ({ id, title, emoji }) => {
     setCurrentPage(page);
   };
 
-  const { setNodeRef, isOver } = useDroppable({ id: id.toString() });
+  const { setNodeRef, isOver } = useDroppable({ 
+    id: typeof id === 'string' ? id : String(id) 
+  });
 
-  const className = `${styles.mainBoard} ${id === 0 ? styles.allTasksBoard : ''} ${isOver ? styles.dragOver : ''}`;
+  const isAllTasks = boardName === 'all tasks';
+  const className = `${styles.mainBoard} ${isAllTasks ? styles.allTasksBoard : ''} ${isOver ? styles.dragOver : ''}`;
   
-  // Debug для досок 1 и 2
-  if (id === 1 || id === 2) {
-    console.log(`Board ${id}: isOver=${isOver}, className="${className}"`);
-  }
+  // Определяем CSS класс для доски по имени
+  const getBoardClass = () => {
+    switch(boardName) {
+      case 'start': return styles.startBoard;
+      case 'in progress': return styles.progressBoard;
+      case 'victory': return styles.victoryBoard;
+      case 'defeat': return styles.defeatBoard;
+      default: return '';
+    }
+  };
   
   return (
     <div 
       ref={setNodeRef} 
-      data-board-id={id}
-      className={className}
+      data-board-name={boardName}
+      className={`${className} ${getBoardClass()}`}
     >
       <div className={styles.mainBoardHeader}>
-        <p>{title}</p>
+        <p>{boardName}</p>
         <p>{emoji}</p>
       </div>
 
-      <div className={id === 0 ? styles.allTasksGrid : styles.regularBoard}>
+      <div className={isAllTasks ? styles.allTasksGrid : styles.regularBoard}>
         {filteredTAsk?.length > 0 ? (
-          (id === 0 ? paginatedTasks : filteredTAsk).map((task) => {
+          (isAllTasks ? paginatedTasks : filteredTAsk).map((task) => {
             // Для All Tasks показываем полные TaskCard, для остальных досок - SmallTaskCard
-            if (id === 0) {
+            if (isAllTasks) {
               return (
                 <TaskCard
-                key={task.id}
-                id={task.id}
-                title={task.title}
-                description={task.description || ""}
-                status={task.status || "easy"}
-                reward={task.reward}
-                dateCreate={task.dateCreate}
-                expiredDate={task.expiredDate}
-                boardId={task.boardId}
-                isCompleted={task.isCompleted}
-                isFailed={task.isFailed}
+                  key={task.id}
+                  {...task}  // Передаем все поля напрямую
                 />
               );
             } else {
               return (
                 <SmallTaskCard
                   key={task.id}
-                  id={task.id}
-                  title={task.title}
-                  description={task.description || ""}
-                  status={task.status || "easy"}
-                  boardId={task.boardId}
-                  reward={task.reward}
-                  dateCreate={task.dateCreate}
-                  expiredDate={task.expiredDate}
-                  isCompleted={task.isCompleted}
-                  isFailed={task.isFailed}
+                  {...task}  // Передаем все поля напрямую
                 />
               );
             }
           })
         ) : (
           <div className={styles.emptyBoard}>
-            {id === 0 ? "Нет задач" : "Перетащите задачу сюда"}
+            {isAllTasks ? "Нет задач" : "Перетащите задачу сюда"}
           </div>
         )}
       </div>
 
       {/* Пагинация только для All Tasks доски */}
-      {id === 0 && filteredTAsk.length > itemsPerPage && (
+      {isAllTasks && filteredTAsk.length > itemsPerPage && (
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}

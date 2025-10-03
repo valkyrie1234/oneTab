@@ -23,32 +23,32 @@
     opacity: 0.3;
 }
 
-/* Специальные стили для разных досок */
-.mainBoard[data-board-id="0"] {
+/* Специальные стили для разных досок (по имени!) */
+.mainBoard[data-board-name="all tasks"] {
     background-color: var(--color-wood-500);
     border-color: var(--color-wood-700);
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
 }
 
-.mainBoard[data-board-id="1"] {
+.startBoard {
     background-color: #6B8E6B;
     border-color: #5A7A5A;
     box-shadow: 0 8px 24px rgba(107, 142, 107, 0.2);
 }
 
-.mainBoard[data-board-id="2"] {
+.progressBoard {
     background-color: #B8860B;
     border-color: #9A7209;
     box-shadow: 0 8px 24px rgba(184, 134, 11, 0.2);
 }
 
-.mainBoard[data-board-id="3"] {
+.victoryBoard {
     background-color: #DAA520;
     border-color: #B8860B;
     box-shadow: 0 8px 24px rgba(218, 165, 32, 0.25);
 }
 
-.mainBoard[data-board-id="4"] {
+.defeatBoard {
     background-color: #708090;
     border-color: #5F6A6A;
     box-shadow: 0 8px 24px rgba(112, 128, 144, 0.2);
@@ -110,19 +110,19 @@
   animation: float 3s ease-in-out infinite;
 }
 
-.mainBoard[data-board-id="1"] .emptyBoard::before {
+.startBoard .emptyBoard::before {
   content: '🎯';
 }
 
-.mainBoard[data-board-id="2"] .emptyBoard::before {
+.progressBoard .emptyBoard::before {
   content: '⚔️';
 }
 
-.mainBoard[data-board-id="3"] .emptyBoard::before {
+.victoryBoard .emptyBoard::before {
   content: '🏆';
 }
 
-.mainBoard[data-board-id="4"] .emptyBoard::before {
+.defeatBoard .emptyBoard::before {
   content: '💀';
 }
 
@@ -167,23 +167,23 @@
 }
 
 /* Специальные цвета заголовков для разных досок */
-.mainBoard[data-board-id="0"] .mainBoardHeader p {
+.mainBoard[data-board-name="all tasks"] .mainBoardHeader p {
     color: var(--color-wood-800);
 }
 
-.mainBoard[data-board-id="1"] .mainBoardHeader p {
+.startBoard .mainBoardHeader p {
     color: #2F4F2F;
 }
 
-.mainBoard[data-board-id="2"] .mainBoardHeader p {
+.progressBoard .mainBoardHeader p {
     color: #8B6914;
 }
 
-.mainBoard[data-board-id="3"] .mainBoardHeader p {
+.victoryBoard .mainBoardHeader p {
     color: #B8860B;
 }
 
-.mainBoard[data-board-id="4"] .mainBoardHeader p {
+.defeatBoard .mainBoardHeader p {
     color: #2F4F4F;
 }
 
@@ -194,24 +194,24 @@
 }
 
 /* Главная доска (All Tasks) без поднятия при hover */
-.mainBoard[data-board-id="0"]:hover {
+.mainBoard[data-board-name="all tasks"]:hover {
     transform: none;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-.mainBoard[data-board-id="1"]:hover {
+.startBoard:hover {
     box-shadow: 0 8px 20px rgba(107, 142, 107, 0.25);
 }
 
-.mainBoard[data-board-id="2"]:hover {
+.progressBoard:hover {
     box-shadow: 0 8px 20px rgba(184, 134, 11, 0.25);
 }
 
-.mainBoard[data-board-id="3"]:hover {
+.victoryBoard:hover {
     box-shadow: 0 8px 20px rgba(218, 165, 32, 0.3);
 }
 
-.mainBoard[data-board-id="4"]:hover {
+.defeatBoard:hover {
     box-shadow: 0 8px 20px rgba(112, 128, 144, 0.25);
 }
 
@@ -222,35 +222,35 @@
 }
 
 /* Специфические dragOver стили для каждой доски */
-.mainBoard[data-board-id="0"].dragOver {
+.mainBoard[data-board-name="all tasks"].dragOver {
     transform: scale(1.03) !important;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25) !important;
     border-color: var(--color-wood-800) !important;
     border-width: 6px !important;
 }
 
-.mainBoard[data-board-id="1"].dragOver {
+.startBoard.dragOver {
     transform: scale(1.03) !important;
     box-shadow: 0 12px 30px rgba(107, 142, 107, 0.4) !important;
     border-color: #4A6A4A !important;
     border-width: 6px !important;
 }
 
-.mainBoard[data-board-id="2"].dragOver {
+.progressBoard.dragOver {
     transform: scale(1.03) !important;
     box-shadow: 0 12px 30px rgba(184, 134, 11, 0.4) !important;
     border-color: #8A6207 !important;
     border-width: 6px !important;
 }
 
-.mainBoard[data-board-id="3"].dragOver {
+.victoryBoard.dragOver {
     transform: scale(1.03) !important;
     box-shadow: 0 12px 30px rgba(218, 165, 32, 0.4) !important;
     border-color: #A67C0A !important;
     border-width: 6px !important;
 }
 
-.mainBoard[data-board-id="4"].dragOver {
+.defeatBoard.dragOver {
     transform: scale(1.03) !important;
     box-shadow: 0 12px 30px rgba(112, 128, 144, 0.4) !important;
     border-color: #708090 !important;
@@ -282,19 +282,19 @@
     animation: pulse 4s ease-in-out infinite;
 }
 
-.mainBoard[data-board-id="1"]::after {
+.startBoard::after {
     background: rgba(107, 142, 107, 0.3);
 }
 
-.mainBoard[data-board-id="2"]::after {
+.progressBoard::after {
     background: rgba(184, 134, 11, 0.3);
 }
 
-.mainBoard[data-board-id="3"]::after {
+.victoryBoard::after {
     background: rgba(218, 165, 32, 0.35);
 }
 
-.mainBoard[data-board-id="4"]::after {
+.defeatBoard::after {
     background: rgba(112, 128, 144, 0.3);
 }
 

@@ -1,61 +1,97 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./TaskCard.module.css";
 import Badge from "../../uiKit/Badge/Badge";
 import DateBadge from "../../uiKit/DateBadge/DateBadge";
 import ExpiredDateBadge from "../../uiKit/ExpiredDateBadge/ExpiredDateBadge";
 import ProgressBar from "../../uiKit/ProgressBar/ProgressBar";
-import { TaskCardProps } from "./types";
 import RewardBar from "../RewardBar/RewardBar";
 import { spliceTextHelper } from "./Helpers/SpliceTextHelper";
-import useTasksStore from "../../store/storeTasks";
+import useTasksStore, { ITasks } from "../../store/storeTasks";
+import useNotificationStore from "../../store/storeNotifications";
 import { useDraggable } from "@dnd-kit/core";
 
-const TaskCard: React.FC<TaskCardProps> = ({
+const TaskCard: React.FC<ITasks> = ({
   description,
-  status,
+  difficulty,
   title,
-  reward,
+  rewardExp,
+  rewardGold,
   id,
   dateCreate,
-  expiredDate,
-  boardId
+  expiredDate
 }) => {
-  const { deleteTask } = useTasksStore();
+  const { deleteTaskAsync } = useTasksStore();
+  const addNotification = useNotificationStore((state) => state.addNotification);
+  const [deleting, setDeleting] = useState(false);
 
-  const { setNodeRef, listeners, attributes } = useDraggable({ id: id.toString() });
+  // Проверяем, что id существует и является строкой
+  if (!id) {
+    console.error('TaskCard: id is required');
+    return null;
+  }
+
+  const { setNodeRef, listeners, attributes } = useDraggable({ 
+    id: typeof id === 'string' ? id : String(id) 
+  });
   
   const handleClick = () => {
     // Обработчик клика для будущих улучшений
   };
+
+  // Маппинг difficulty в старый формат для Badge
+  const statusMap = {
+    'EASY': 'easy',
+    'MEDIUM': 'medium',
+    'HARD': 'hard',
+    'EPIC': 'epic',
+    'COMPLETED': 'completed'
+  } as const;
+
+  // Безопасное создание даты
+  const createDate = dateCreate ? new Date(dateCreate) : new Date();
+  const expiryDate = expiredDate ? new Date(expiredDate) : null;
 
   return (
     <div 
       ref={setNodeRef} 
       {...listeners}
       {...attributes}
-      className={`${styles.taskCard} ${boardId === 4 ? styles.defeat : ""} ${boardId === 3 ? styles.victory : ""}`}
+      className={styles.taskCard}
       onClick={handleClick}
     >
       <div className={styles.taskCardHeader}>
-        <p>{title}</p>
-        <Badge status={status} />
+        <p>{title || 'Без названия'}</p>
+        <Badge status={statusMap[difficulty] || "easy"} />
       </div>
       <div className={styles.dateBadgesRow}>
-        <DateBadge date={dateCreate} />
-        <ExpiredDateBadge expiredDate={expiredDate} />
+        <DateBadge date={createDate} />
+        <ExpiredDateBadge expiredDate={expiryDate} />
       </div>
-      <RewardBar exp={reward.exp} gold={reward.gold} />
-      <div className={styles.cardContent}>{spliceTextHelper(description)}</div>
+      <RewardBar exp={rewardExp || 0} gold={rewardGold || 0} />
+      <div className={styles.cardContent}>{spliceTextHelper(description || "")}</div>
       <div className={styles.cardActions}>
-        <ProgressBar expiredDate={expiredDate} />
+        <ProgressBar expiredDate={expiryDate} />
         <button
-          onClick={(e) => {
+          onClick={async (e) => {
             e.stopPropagation();
-            deleteTask(id);
+            
+            if (deleting) return;
+            
+            setDeleting(true);
+            
+            const success = await deleteTaskAsync(id);
+            
+            if (success) {
+              addNotification("success", "Квест удален!", "❌", 3000);
+            } else {
+              addNotification("error", "Не удалось удалить квест", "☠️", 4000);
+              setDeleting(false);
+            }
           }}
           className={styles.cardDeleteButton}
+          disabled={deleting}
         >
-          ❌
+          {deleting ? "⏳" : "❌"}
         </button>
       </div>
     </div>

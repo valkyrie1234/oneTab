@@ -13,6 +13,12 @@ const useTaskExpiry = (expiredDate: Date | null): TaskExpiryResult => {
       return null;
     }
 
+    // Проверяем валидность даты
+    if (!(expiredDate instanceof Date) || isNaN(expiredDate.getTime())) {
+      console.error('useTaskExpiry: Invalid date provided', expiredDate);
+      return null;
+    }
+
     const now = new Date();
     const timeDiff = expiredDate.getTime() - now.getTime();
 

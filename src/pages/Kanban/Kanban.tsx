@@ -3,7 +3,9 @@ import styles from "./Kanban.module.css";
 import Board from "../../Components/Board/Board";
 import useBoardsStore from "../../store/storeBoards";
 import useTasksStore from "../../store/storeTasks";
+import useNotificationStore from "../../store/storeNotifications";
 import useExpiredTasksChecker from "../../hooks/useExpiredTasksChecker";
+import { TasksAPI } from "../../api/client";
 import {
   DndContext,
   DragEndEvent,
@@ -18,6 +20,18 @@ import {
 const Kanban = () => {
   const boards = useBoardsStore((state) => state.boards);
   const { moveTask, tasks } = useTasksStore();
+  const addNotification = useNotificationStore((state) => state.addNotification);
+  
+  // Разделяем доски
+  const allTasksBoard = boards.find(b => b.name === 'all tasks');
+  const otherBoards = boards.filter(b => b.name !== 'all tasks').sort((a, b) => a.order - b.order);
+  
+  // Debug
+  React.useEffect(() => {
+    console.log('📋 Kanban render - Boards count:', boards.length);
+    console.log('📋 All Tasks board:', allTasksBoard);
+    console.log('📋 Other boards:', otherBoards);
+  }, [boards]);
   
   // Автоматически проверяем просроченные задачи
   useExpiredTasksChecker();
@@ -36,7 +50,7 @@ const Kanban = () => {
     setActiveId(event.active.id as string);
   };
 
-  const handleDragEnd = (event: DragEndEvent) => {
+  const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
 
     setActiveId(null);
@@ -46,13 +60,67 @@ const Kanban = () => {
     }
 
     const taskId = active.id as string;
-    const newBoardId = parseInt(over.id as string);
+    const newBoardId = over.id as string;  // UUID строка
     
-    console.log('DragEnd event:', { active: active.id, over: over.id, taskId, newBoardId });
+    // Находим задачу и старую доску
+    const task = tasks.find(t => t.id === taskId);
+    const oldBoardId = task?.boardId;
+    
+    // Если доска не изменилась, ничего не делаем
+    if (oldBoardId === newBoardId) {
+      return;
+    }
 
-    // Перемещаем задачу на новую доску
-    if (!isNaN(newBoardId)) {
-      moveTask(taskId, newBoardId);
+    // Находим имена досок для уведомления
+    const newBoard = boards.find(b => b.id === newBoardId);
+    const boardName = newBoard?.name || 'unknown';
+    
+    console.log('🎯 DragEnd event:', { taskId, oldBoardId, newBoardId, boardName });
+
+    // Оптимистичное обновление UI
+    await moveTask(taskId, newBoardId);
+
+    // Синхронизация с backend
+    try {
+      const response = await TasksAPI.update(taskId, { boardId: newBoardId }) as { success: boolean };
+      
+      if (response.success) {
+        console.log('✅ Задача синхронизирована с backend');
+        
+        // Уведомление об успехе
+        addNotification(
+          "info",
+          `Квест перемещен в "${boardName}"`,
+          "📦",
+          3000
+        );
+      } else {
+        // Откат изменений при ошибке
+        if (oldBoardId) {
+          await moveTask(taskId, oldBoardId);
+        }
+        
+        addNotification(
+          "error",
+          "Не удалось синхронизировать квест с сервером",
+          "☠️",
+          5000
+        );
+      }
+    } catch (error) {
+      console.error('❌ Ошибка синхронизации:', error);
+      
+      // Откат изменений
+      if (oldBoardId) {
+        await moveTask(taskId, oldBoardId);
+      }
+      
+      addNotification(
+        "error",
+        "Не удалось синхронизировать квест с сервером",
+        "☠️",
+        5000
+      );
     }
   };
 
@@ -68,25 +136,21 @@ const Kanban = () => {
       <div className={styles.trelloContainer}>
         <div className={styles.allBoardsContainer}>
           {/* All Tasks - отдельная большая доска */}
-          {boards
-            ?.filter((board) => board.id === 0)
-            .map((board) => (
-              <div key={board.id} className={styles.allTasksSection}>
-                <Board id={board.id} title={board.title} emoji={board.emoji} />
-              </div>
-            ))}
+          {allTasksBoard && (
+            <div className={styles.allTasksSection}>
+              <Board {...allTasksBoard} title={allTasksBoard.name} />
+            </div>
+          )}
 
+          {/* Остальные доски (start, in progress, victory, defeat) */}
           <div className={styles.kanbanBoardsContainer}>
-            {boards
-              ?.filter((board) => board.id !== 0)
-              .map((board) => (
-                <Board
-                  id={board.id}
-                  title={board.title}
-                  emoji={board.emoji}
-                  key={board.id}
-                />
-              ))}
+            {otherBoards.map((board) => (
+              <Board
+                {...board}
+                title={board.name}
+                key={board.id}
+              />
+            ))}
           </div>
         </div>
       </div>

@@ -1,0 +1,100 @@
+@import url('../../designToken/designToken.css');
+
+.container {
+  padding: 40px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--color-wood-100), var(--color-mystic-200));
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.title {
+  font-family: 'Courier New', monospace;
+  font-size: 48px;
+  font-weight: bold;
+  color: var(--color-wood-800);
+  text-shadow: 3px 3px 0 var(--color-accent-sapphire);
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-family: 'Courier New', monospace;
+  font-size: 18px;
+  color: var(--color-text-300);
+}
+
+.content {
+  max-width: 1000px;
+  margin: 0 auto;
+  background-color: var(--color-wood-100);
+  border: 4px solid var(--color-wood-700);
+  box-shadow: 12px 12px 0 var(--color-wood-800);
+  padding: 40px;
+  position: relative;
+}
+
+.content::before,
+.content::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-wood-700);
+}
+
+.content::before {
+  top: -4px;
+  left: -4px;
+}
+
+.content::after {
+  bottom: -4px;
+  right: -4px;
+}
+
+.infoText {
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--color-text-200);
+  text-align: center;
+}
+
+.badge {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: var(--color-accent-sapphire);
+  color: white;
+  border: 3px solid var(--color-wood-700);
+  box-shadow: 4px 4px 0 var(--color-wood-800);
+  font-weight: bold;
+  margin: 10px;
+}
+
+.logoutButton {
+  display: block;
+  margin: 30px auto 0;
+  padding: 12px 24px;
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--color-text-200);
+  background-color: var(--color-wood-100);
+  border: 3px solid var(--color-wood-700);
+  box-shadow: 6px 6px 0 var(--color-wood-800);
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+.logoutButton:hover {
+  filter: brightness(1.05);
+}
+
+.logoutButton:active {
+  transform: translate(2px, 2px);
+  box-shadow: 4px 4px 0 var(--color-wood-800);
+}
+

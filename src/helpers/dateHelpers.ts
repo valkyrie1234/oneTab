@@ -4,6 +4,12 @@
  * @returns строка в формате "hh:mm dd-mm-yy"
  */
 export const formatDateTime = (date: Date): string => {
+  // Проверяем валидность даты
+  if (!date || !(date instanceof Date) || isNaN(date.getTime())) {
+    console.error('formatDateTime: Invalid date provided', date);
+    return '-- --:-- --';
+  }
+  
   const hours = date.getHours().toString().padStart(2, '0');
   const minutes = date.getMinutes().toString().padStart(2, '0');
   const day = date.getDate().toString().padStart(2, '0');

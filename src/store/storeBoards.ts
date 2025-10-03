@@ -1,31 +1,46 @@
 import { create } from "zustand";
 
-
-
+// Интерфейс доски (соответствует бэкенду)
 export interface IBoard {
-    id: number;
-    title: string;
-    emoji?: string;
-  }
+  id: string;           // UUID (не number!)
+  name: string;         // Изменено с title на name
+  emoji?: string;
+  description?: string;
+  color?: string;
+  order: number;
+  isSystem: boolean;    // Системная доска (нельзя удалить)
+  userId: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IBoardsStore {
+  boards: IBoard[];
+  setBoards: (boards: IBoard[]) => void;  // Загрузка досок с сервера
+  createBoard: (board: IBoard) => void;
+  deleteBoard: (id: string) => void;
+  updateBoard: (id: string, updates: Partial<IBoard>) => void;
+}
+
+const useBoardsStore = create<IBoardsStore>((set) => ({
+  boards: [],  // Пустой массив - доски загружаются с сервера
   
-  export interface IStore {
-    boards: IBoard[];
-    createBoard: (board: IBoard) => void;
-    //   deleteBoard: (id: number) => void;
-  }
+  setBoards: (boards: IBoard[]) => set({ boards }),
   
-  const useBoardsStore = create<IStore>((set) => ({
-    boards: [
-      { title: "All Tasks", emoji: "📋", id: 0 },
-      { title: "start", emoji: "🎯", id: 1 },
-      { title: "in progress", emoji: "⚔️", id: 2 },
-      { title: "victory", emoji: "🌟🌟🌟", id: 3 },
-      { title: "defeat", emoji: "☠️", id: 4 },
-    ],
-    createBoard: (board: IBoard) =>
-      set((state) => ({ boards: [...state.boards, board] })),
-  }));
-  
-  export default useBoardsStore;
+  createBoard: (board: IBoard) =>
+    set((state) => ({ boards: [...state.boards, board] })),
+    
+  deleteBoard: (id: string) =>
+    set((state) => ({ boards: state.boards.filter((b) => b.id !== id) })),
+    
+  updateBoard: (id: string, updates: Partial<IBoard>) =>
+    set((state) => ({
+      boards: state.boards.map((board) =>
+        board.id === id ? { ...board, ...updates } : board
+      ),
+    })),
+}));
+
+export default useBoardsStore;
   
   

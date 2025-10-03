@@ -74,11 +74,86 @@
     font-weight: 700;
 }
 
+/* Информация о пользователе */
+.userInfo {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: var(--color-wood-400);
+  border: 3px solid var(--color-wood-700);
+  box-shadow: 4px 4px 0 var(--color-wood-800);
+  text-align: center;
+}
+
+.userName {
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--color-wood-100);
+  margin-bottom: 10px;
+}
+
+.userStats {
+  display: flex;
+  justify-content: space-around;
+  gap: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  color: var(--color-wood-200);
+  margin-top: 8px;
+}
+
+.userStats span {
+  font-weight: bold;
+}
+
+.roleBadge {
+  margin-top: 10px;
+  padding: 4px 12px;
+  background-color: var(--color-mystic-500);
+  color: white;
+  border: 2px solid var(--color-wood-700);
+  box-shadow: 2px 2px 0 var(--color-wood-800);
+  font-size: 11px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+/* Секция выхода */
+.logoutSection {
+  position: absolute;
+  bottom: 20px;
+  left: 25px;
+  right: 25px;
+}
+
+.logoutButton {
+  width: 100%;
+  padding: 12px;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--color-text-200);
+  background-color: var(--color-wood-300);
+  border: 3px solid var(--color-wood-700);
+  box-shadow: 4px 4px 0 var(--color-wood-800);
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+.logoutButton:hover {
+  filter: brightness(1.1);
+}
+
+.logoutButton:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--color-wood-800);
+}
+
 /* Декоративные элементы */
 .sidebar::after {
     content: '⚔️';
     position: absolute;
-    bottom: 30px;
+    bottom: 80px;
     right: 30px;
     font-size: 2rem;
     opacity: 0.3;

@@ -3,22 +3,30 @@ import Input from "../../uiKit/Input/Input";
 import Select from "../../uiKit/Select/Select";
 import { statusOptions } from "../../Consts/options";
 import { DifficultyStatus } from "../../Consts/status";
-import useTasksStore from "../../store/storeTasks";
+import useTasksStore, { ITasks } from "../../store/storeTasks";
+import useBoardsStore from "../../store/storeBoards";
+import useNotificationStore from "../../store/storeNotifications";
+import useAuthStore from "../../store/storeAuth";
+import { TasksAPI } from "../../api/client";
+import type { IApiResponse } from "../../api/types";
 import styles from "./CreateModal.module.css";
 import Button from "../../uiKit/Button/Button";
 import RangeInput from "../../uiKit/RangeInput/RangeInput";
 import useReward from "../../hooks/useReward";
-import { v4 as uuidv4 } from "uuid";
 
 const CreateModal = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState<DifficultyStatus>("easy");
-  const [gold, setGold] = useState(0);
-  const [exp, setExpr] = useState(0);
+  const [gold, setGold] = useState(100);
+  const [exp, setExpr] = useState(50);
   const [expiredDate, setExpiredDate] = useState<string>("");
+  const [loading, setLoading] = useState(false);
 
   const { createTask } = useTasksStore();
+  const boards = useBoardsStore((state) => state.boards);
+  const { user } = useAuthStore();
+  const addNotification = useNotificationStore((state) => state.addNotification);
   const { setReward, setExp } = useReward();
   
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,39 +45,95 @@ const CreateModal = () => {
     setStatus(selectedStatus);
   };
 
-  const createHandler = () => {
-    if (!title || !status || !description) return;
-
-    // Парсим дату окончания, если она указана
-    let parsedExpiredDate: Date | null = null;
-    if (expiredDate) {
-      const date = new Date(expiredDate);
-      if (!isNaN(date.getTime())) {
-        parsedExpiredDate = date;
-      }
+  const createHandler = async () => {
+    if (!title || !status || !description) {
+      addNotification("warning", "Заполните все обязательные поля квеста!", "📜");
+      return;
     }
 
-    createTask({
-      id: uuidv4(),
-      boardId: 0,
-      title: title,
-      status: status,
-      description: description,
-      dateCreate: new Date(),
-      expiredDate: parsedExpiredDate,
-      isCompleted: false,
-      isFailed: false,
-      reward: {
-        gold: gold,
-        exp: exp,
-      },
-    });
-    setTitle("");
-    setDescription("");
-    setStatus("easy");
-    setExpr(0);
-    setGold(0);
-    setExpiredDate("");
+    if (!user) {
+      addNotification("error", "Войдите в гильдию чтобы создать квест!", "🚪");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      // Маппинг status → difficulty для API
+      const difficultyMap = {
+        'easy': 'EASY',
+        'medium': 'MEDIUM',
+        'hard': 'HARD',
+        'epic': 'EPIC',
+        'completed': 'COMPLETED'
+      } as const;
+
+      // Находим доску "all tasks" для новых задач
+      // Новые задачи должны попадать в общий пул "all tasks"
+      const allTasksBoard = boards.find(b => b.name === 'all tasks');
+      const boardId = allTasksBoard?.id || undefined;
+
+      const response = await TasksAPI.create({
+        title,
+        description,
+        difficulty: difficultyMap[status],
+        rewardExp: exp,
+        rewardGold: gold,
+        expiredDate: expiredDate || undefined,
+        boardId,
+        userId: user.id
+      }) as IApiResponse<{ message: string; task: ITasks }>;
+
+      console.log("📝 Response от создания задачи:", response);
+
+      if (response.success) {
+        // Добавляем задачу в локальный store
+        console.log("✅ Задача создана:", response.data.task);
+        
+        // Проверяем структуру данных
+        const taskData = response.data.task;
+        if (!taskData.boardId) {
+          console.warn("⚠️ Задача создана без boardId, устанавливаем null");
+        }
+        
+        createTask(taskData);
+        
+        // ✅ Успех - квест создан!
+        addNotification(
+          "success",
+          "⚔️ Квест успешно создан! Да начнется приключение!",
+          "🎯",
+          5000
+        );
+
+        // Очищаем форму
+        setTitle("");
+        setDescription("");
+        setStatus("easy");
+        setExpr(50);
+        setGold(100);
+        setExpiredDate("");
+      } else {
+        // ❌ Ошибка от API
+        addNotification(
+          "error",
+          "☠️ Квест не получилось создать, уже разбираемся с гильдией...",
+          "🛡️",
+          6000
+        );
+      }
+    } catch (error) {
+      // ❌ Ошибка сети/сервера
+      console.error("Ошибка создания квеста:", error);
+      addNotification(
+        "error",
+        "☠️ Квест не получилось создать, уже разбираемся с гильдией...",
+        "🛡️",
+        6000
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -115,7 +179,9 @@ const CreateModal = () => {
         options={statusOptions}
         onStatusChange={handleStatusChange}
       />
-      <Button onClick={() => createHandler()}>Создать квест</Button>
+      <Button onClick={() => createHandler()} disabled={loading}>
+        {loading ? "⏳ Создание квеста..." : "⚔️ Создать квест"}
+      </Button>
     </div>
   );
 };
