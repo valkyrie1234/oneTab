@@ -1,7 +1,8 @@
-import React, { useState, useMemo } from "react";
+import React, { useMemo } from "react";
 import styles from "./Board.module.css";
 import { IBoard } from "../../store/storeBoards";
 import useTasksStore from "../../store/storeTasks";
+import usePagination from "../../hooks/usePagination";
 import SmallTaskCard from "../SmallTaskCard/SmallTaskCard";
 import TaskCard from "../TaskCard/TaskCard";
 import { Pagination } from "../../uiKit/Pagination";
@@ -9,36 +10,36 @@ import { useDroppable } from "@dnd-kit/core";
 
 const Board: React.FC<IBoard & { title?: string }> = ({ id, title, name, emoji }) => {
   const task = useTasksStore((state) => state.tasks);
-  const [currentPage, setCurrentPage] = useState(1);
   
   // Используем title (если передан) или name
   const boardName = title || name;
 
   // Для "all tasks" показываем только задачи БЕЗ доски (boardId === null или undefined)
   // Для остальных досок - фильтруем по boardId
-  const filteredTAsk = boardName === 'all tasks' 
-    ? task.filter((task) => !task.boardId || task.boardId === id)
-    : task.filter((task) => task.boardId === id);
+  const filteredTAsk = useMemo(() => 
+    boardName === 'all tasks' 
+      ? task.filter((task) => !task.boardId || task.boardId === id)
+      : task.filter((task) => task.boardId === id),
+    [boardName, task, id]
+  );
 
   // Настройки пагинации (для "all tasks" 5 карточек)
   const itemsPerPage = boardName === 'all tasks' ? 5 : 8;
-  const totalPages = Math.ceil(filteredTAsk.length / itemsPerPage);
 
-  // Вычисляем задачи для текущей страницы
-  const paginatedTasks = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return filteredTAsk.slice(startIndex, endIndex);
-  }, [filteredTAsk, currentPage, itemsPerPage]);
+  // Используем универсальный хук пагинации
+  const {
+    paginatedItems: paginatedTasks,
+    currentPage,
+    totalPages,
+    totalItems,
+    goToPage,
+    resetPage
+  } = usePagination(filteredTAsk, itemsPerPage);
 
   // Сбрасываем на первую страницу при изменении фильтра
   React.useEffect(() => {
-    setCurrentPage(1);
-  }, [filteredTAsk.length]);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
+    resetPage();
+  }, [filteredTAsk.length, resetPage]);
 
   const { setNodeRef, isOver } = useDroppable({ 
     id: typeof id === 'string' ? id : String(id) 
@@ -99,13 +100,13 @@ const Board: React.FC<IBoard & { title?: string }> = ({ id, title, name, emoji }
       </div>
 
       {/* Пагинация только для All Tasks доски */}
-      {isAllTasks && filteredTAsk.length > itemsPerPage && (
+      {isAllTasks && totalItems > itemsPerPage && (
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
-          onPageChange={handlePageChange}
+          onPageChange={goToPage}
           itemsPerPage={itemsPerPage}
-          totalItems={filteredTAsk.length}
+          totalItems={totalItems}
           showInfo={true}
         />
       )}

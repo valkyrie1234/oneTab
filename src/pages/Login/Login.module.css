@@ -5,7 +5,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--color-wood-100) 0%, var(--color-mystic-100) 100%);
+  background-color: var(--color-wood-100);
   padding: 20px;
 }
 

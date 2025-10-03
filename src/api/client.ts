@@ -158,6 +158,10 @@ export const BoardsAPI = {
  * Users API
  */
 export const UsersAPI = {
+  async getAll() {
+    return APIClient.get(`/api/users`);
+  },
+
   async getProfile(userId: string) {
     return APIClient.get(`/api/users/${userId}`);
   },

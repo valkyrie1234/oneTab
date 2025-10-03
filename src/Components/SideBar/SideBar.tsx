@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/storeAuth";
 import { getSidebarRoutes } from "../../routes/consts";
+import { getRoleEmoji } from "../../helpers/userHelpers";
 import styles from "./SideBar.module.css";
 import classNames from "classnames";
 
@@ -18,14 +19,6 @@ const SideBar: React.FC = () => {
   const handleLogout = () => {
     logout();
     navigate("/");
-  };
-
-  const getRoleEmoji = (role: string) => {
-    switch (role) {
-      case "ADMIN": return "👑";
-      case "MODERATOR": return "🛡️";
-      default: return "👤";
-    }
   };
 
   return (

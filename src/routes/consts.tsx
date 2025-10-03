@@ -8,6 +8,8 @@ import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
 import Admin from "../pages/Admin/Admin";
 import Moderator from "../pages/Moderator/Moderator";
+import Users from "../pages/Users/Users";
+import Statistics from "../pages/Statistics/Statistics";
 import PrivateRoute from "./PrivateRoute";
 
 // Основные маршруты для приложения
@@ -62,6 +64,20 @@ export const routes = [
     path: "/admin",
     element: <PrivateRoute requiredRole="ADMIN"><Layout><Admin /></Layout></PrivateRoute>,
     label: "👑 Админ панель",
+    adminOnly: true,
+    showInSidebar: true
+  },
+  {
+    path: "/users",
+    element: <PrivateRoute requiredRole="ADMIN"><Layout><Users /></Layout></PrivateRoute>,
+    label: "👥 Пользователи",
+    adminOnly: true,
+    showInSidebar: true
+  },
+  {
+    path: "/statistics",
+    element: <PrivateRoute requiredRole="ADMIN"><Layout><Statistics /></Layout></PrivateRoute>,
+    label: "📊 Статистика",
     adminOnly: true,
     showInSidebar: true
   },
