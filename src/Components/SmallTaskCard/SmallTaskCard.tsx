@@ -9,29 +9,34 @@ import { useDraggable } from "@dnd-kit/core";
 import useTasksStore, { ITasks } from "../../store/storeTasks";
 import useNotificationStore from "../../store/storeNotifications";
 
-const SmallTaskCard: React.FC<ITasks> = ({ 
+interface SmallTaskCardProps extends ITasks {
+  boardName?: string;
+}
+
+const SmallTaskCard: React.FC<SmallTaskCardProps> = ({ 
   title, 
   id, 
   rewardGold,
   rewardExp,
   difficulty,
   dateCreate, 
-  expiredDate
+  expiredDate,
+  boardName
 }) => {
   const { setExp, setReward } = useReward();
   const { deleteTaskAsync } = useTasksStore();
   const addNotification = useNotificationStore((state) => state.addNotification);
   const [deleting, setDeleting] = useState(false);
+
+  const { setNodeRef, listeners, attributes } = useDraggable({ 
+    id: id ? (typeof id === 'string' ? id : String(id)) : 'temp-id'
+  });
   
   // Проверяем, что id существует и является строкой
   if (!id) {
     console.error('SmallTaskCard: id is required');
     return null;
   }
-
-  const { setNodeRef, listeners, attributes } = useDraggable({ 
-    id: typeof id === 'string' ? id : String(id) 
-  });
   
   const handleClick = () => {
     // Обработчик клика для будущих улучшений
@@ -67,10 +72,28 @@ const SmallTaskCard: React.FC<ITasks> = ({
   const createDate = dateCreate ? new Date(dateCreate) : new Date();
   const expiryDate = expiredDate ? new Date(expiredDate) : null;
 
+  // Определяем CSS класс в зависимости от доски
+  const getBoardClassName = () => {
+    if (!boardName) return styles.smallTaskCardContainer;
+    
+    switch(boardName) {
+      case 'victory':
+        return `${styles.smallTaskCardContainer} ${styles.victory}`;
+      case 'defeat':
+        return `${styles.smallTaskCardContainer} ${styles.defeat}`;
+      case 'start':
+        return `${styles.smallTaskCardContainer} ${styles.start}`;
+      case 'in progress':
+        return `${styles.smallTaskCardContainer} ${styles.progress}`;
+      default:
+        return styles.smallTaskCardContainer;
+    }
+  };
+
   return (
     <div 
       ref={setNodeRef}
-      className={styles.smallTaskCardContainer}
+      className={getBoardClassName()}
     >
       {/* Область для драга - вся карточка кроме кнопки */}
       <div 

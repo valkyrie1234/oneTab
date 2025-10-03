@@ -10,7 +10,11 @@ import useTasksStore, { ITasks } from "../../store/storeTasks";
 import useNotificationStore from "../../store/storeNotifications";
 import { useDraggable } from "@dnd-kit/core";
 
-const TaskCard: React.FC<ITasks> = ({
+interface TaskCardProps extends ITasks {
+  boardName?: string;
+}
+
+const TaskCard: React.FC<TaskCardProps> = ({
   description,
   difficulty,
   title,
@@ -18,21 +22,22 @@ const TaskCard: React.FC<ITasks> = ({
   rewardGold,
   id,
   dateCreate,
-  expiredDate
+  expiredDate,
+  boardName
 }) => {
   const { deleteTaskAsync } = useTasksStore();
   const addNotification = useNotificationStore((state) => state.addNotification);
   const [deleting, setDeleting] = useState(false);
+
+  const { setNodeRef, listeners, attributes } = useDraggable({ 
+    id: id ? (typeof id === 'string' ? id : String(id)) : 'temp-id'
+  });
 
   // Проверяем, что id существует и является строкой
   if (!id) {
     console.error('TaskCard: id is required');
     return null;
   }
-
-  const { setNodeRef, listeners, attributes } = useDraggable({ 
-    id: typeof id === 'string' ? id : String(id) 
-  });
   
   const handleClick = () => {
     // Обработчик клика для будущих улучшений
@@ -51,12 +56,26 @@ const TaskCard: React.FC<ITasks> = ({
   const createDate = dateCreate ? new Date(dateCreate) : new Date();
   const expiryDate = expiredDate ? new Date(expiredDate) : null;
 
+  // Определяем CSS класс в зависимости от доски
+  const getBoardClassName = () => {
+    if (!boardName) return styles.taskCard;
+    
+    switch(boardName) {
+      case 'victory':
+        return `${styles.taskCard} ${styles.victory}`;
+      case 'defeat':
+        return `${styles.taskCard} ${styles.defeat}`;
+      default:
+        return styles.taskCard;
+    }
+  };
+
   return (
     <div 
       ref={setNodeRef} 
       {...listeners}
       {...attributes}
-      className={styles.taskCard}
+      className={getBoardClassName()}
       onClick={handleClick}
     >
       <div className={styles.taskCardHeader}>

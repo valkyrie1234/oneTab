@@ -77,14 +77,16 @@ const Board: React.FC<IBoard & { title?: string }> = ({ id, title, name, emoji }
               return (
                 <TaskCard
                   key={task.id}
-                  {...task}  // Передаем все поля напрямую
+                  {...task}
+                  boardName={boardName}  // Передаем название доски
                 />
               );
             } else {
               return (
                 <SmallTaskCard
                   key={task.id}
-                  {...task}  // Передаем все поля напрямую
+                  {...task}
+                  boardName={boardName}  // Передаем название доски
                 />
               );
             }
