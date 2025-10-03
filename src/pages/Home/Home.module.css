@@ -266,33 +266,47 @@
     padding: 60px 40px;
 }
 
+.taskCardWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.activityTitle {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: var(--color-wood-800);
+  text-align: center;
+  margin: 0;
+}
+
 .activityEmpty {
-    text-align: center;
+  text-align: center;
 }
 
 .activityEmptyIcon {
-    font-size: 4rem;
-    margin-bottom: 20px;
-    opacity: 0.6;
-    animation: pulseIcon 2s ease-in-out infinite;
+  font-size: 4rem;
+  margin-bottom: 20px;
+  opacity: 0.6;
+  animation: pulseIcon 2s ease-in-out infinite;
 }
 
 @keyframes pulseIcon {
-    0%, 100% { 
-        opacity: 0.6;
-        transform: scale(1);
-    }
-    50% { 
-        opacity: 0.8;
-        transform: scale(1.05);
-    }
+  0%, 100% { 
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
 }
 
 .activityEmptyText {
-    font-size: 1.2rem;
-    color: var(--color-wood-700);
-    margin: 0;
-    line-height: 1.6;
+  font-size: 1.2rem;
+  color: var(--color-wood-700);
+  margin: 0;
+  line-height: 1.6;
 }
 
 /* Responsive Design */

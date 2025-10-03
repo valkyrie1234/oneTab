@@ -75,3 +75,18 @@ export const filterTasksByStatus = (
   }
 };
 
+/**
+ * Получить последнюю созданную активную задачу
+ * @param tasks - массив задач
+ * @returns последняя созданная активная задача или null
+ */
+export const getLastCreatedTask = (tasks: ITasks[]): ITasks | null => {
+  if (tasks.length === 0) return null;
+  
+  const activeTasks = tasks.filter(task => !task.isCompleted && !task.isFailed);
+  
+  if (activeTasks.length === 0) return null;
+  
+  return activeTasks
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0];
+};

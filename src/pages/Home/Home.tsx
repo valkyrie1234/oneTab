@@ -4,7 +4,8 @@ import styles from "./Home.module.css";
 import useAuthStore from "../../store/storeAuth";
 import useTasksStore from "../../store/storeTasks";
 import useLevelSystem from "../../hooks/useLevelSystem";
-import { calculateTaskStats } from "../../helpers/taskHelpers";
+import { calculateTaskStats, getLastCreatedTask } from "../../helpers/taskHelpers";
+import TaskCard from "../../Components/TaskCard/TaskCard";
 
 const Home: React.FC = () => {
   const { user, isAuthenticated } = useAuthStore();
@@ -14,6 +15,12 @@ const Home: React.FC = () => {
   // Если авторизован - показываем статистику
   const levelSystem = useLevelSystem(user?.xp || 0);
   const stats = useMemo(() => calculateTaskStats(tasks), [tasks]);
+
+  // Последняя созданная задача
+  const lastCreatedTask = useMemo(() => {
+    if (!isAuthenticated) return null;
+    return getLastCreatedTask(tasks);
+  }, [tasks, isAuthenticated]);
 
   return (
     <div className={styles.HomePage}>
@@ -139,12 +146,22 @@ const Home: React.FC = () => {
       <section className={styles.activitySection}>
         <h2 className={styles.sectionTitle}>Недавняя активность</h2>
         <div className={styles.activityCard}>
-          <div className={styles.activityEmpty}>
-            <div className={styles.activityEmptyIcon}>📝</div>
-            <p className={styles.activityEmptyText}>
-              Пока нет активности. Создайте свою первую задачу!
-            </p>
-          </div>
+          {isAuthenticated && lastCreatedTask ? (
+            <div className={styles.taskCardWrapper}>
+              <h3 className={styles.activityTitle}>Последняя созданная задача</h3>
+              <TaskCard {...lastCreatedTask} />
+            </div>
+          ) : (
+            <div className={styles.activityEmpty}>
+              <div className={styles.activityEmptyIcon}>📝</div>
+              <p className={styles.activityEmptyText}>
+                {isAuthenticated 
+                  ? "Пока нет задач. Создайте свою первую задачу!"
+                  : "Войдите в систему, чтобы увидеть свою активность"
+                }
+              </p>
+            </div>
+          )}
         </div>
       </section>
     </div>
