@@ -4,8 +4,10 @@ import Board from "../../Components/Board/Board";
 import useBoardsStore from "../../store/storeBoards";
 import useTasksStore from "../../store/storeTasks";
 import useNotificationStore from "../../store/storeNotifications";
+import useAuthStore from "../../store/storeAuth";
 import useExpiredTasksChecker from "../../hooks/useExpiredTasksChecker";
 import { TasksAPI } from "../../api/client";
+import type { IApiResponse } from "../../api/types";
 import {
   DndContext,
   DragEndEvent,
@@ -19,8 +21,9 @@ import {
 
 const Kanban = () => {
   const boards = useBoardsStore((state) => state.boards);
-  const { moveTask, tasks } = useTasksStore();
+  const { moveTask, tasks, updateTask } = useTasksStore();
   const addNotification = useNotificationStore((state) => state.addNotification);
+  const { updateUser } = useAuthStore();
   
   // Разделяем доски
   const allTasksBoard = boards.find(b => b.name === 'all tasks');
@@ -71,31 +74,207 @@ const Kanban = () => {
       return;
     }
 
+    // Проверяем, завершена или провалена ли уже задача
+    if (task?.isCompleted) {
+      addNotification(
+        "warning",
+        "Этот квест уже завершен! Нельзя переместить выполненную задачу.",
+        "⚠️",
+        4000
+      );
+      return;
+    }
+
+    if (task?.isFailed) {
+      addNotification(
+        "warning",
+        "Этот квест уже провален! Нельзя переместить проваленную задачу.",
+        "⚠️",
+        4000
+      );
+      return;
+    }
+
     // Находим имена досок для уведомления
     const newBoard = boards.find(b => b.id === newBoardId);
     const boardName = newBoard?.name || 'unknown';
     
     console.log('🎯 DragEnd event:', { taskId, oldBoardId, newBoardId, boardName });
 
-    // Оптимистичное обновление UI
-    await moveTask(taskId, newBoardId);
+    // Если перемещаем в victory - завершаем задачу с наградой
+    if (boardName === 'victory') {
+      try {
+        type CompleteResponse = {
+          message: string;
+          task: {
+            id: string;
+            completedAt: string;
+            isCompleted: boolean;
+            boardId: string;
+          };
+          user: {
+            id: string;
+            xp: number;
+            gold: number;
+            level: number;
+          };
+          reward: {
+            xp: number;
+            coins: number;
+          };
+        };
 
-    // Синхронизация с backend
-    try {
-      const response = await TasksAPI.update(taskId, { boardId: newBoardId }) as { success: boolean };
-      
-      if (response.success) {
-        console.log('✅ Задача синхронизирована с backend');
+        const response = await TasksAPI.complete(taskId, newBoardId) as IApiResponse<CompleteResponse>;
         
-        // Уведомление об успехе
+        if (response.success) {
+          const { task: completedTask, user: updatedUserData, reward } = response.data;
+          
+          // Обновляем задачу в store (backend уже обновил boardId)
+          updateTask(taskId, {
+            isCompleted: true,
+            completedAt: completedTask.completedAt,
+            boardId: completedTask.boardId
+          });
+          
+          // Обновляем данные пользователя
+          updateUser({
+            xp: updatedUserData.xp,
+            gold: updatedUserData.gold,
+            level: updatedUserData.level
+          });
+          
+          console.log('🎉 Квест завершен! Награда:', reward);
+          
+          // Уведомление о победе
+          addNotification(
+            "success",
+            `🎉 Квест завершен! +${reward.xp} XP, +${reward.coins} золота!`,
+            "🏆",
+            6000
+          );
+        } else {
+          // Откат при ошибке
+          if (oldBoardId) {
+            await moveTask(taskId, oldBoardId);
+          }
+          
+          addNotification(
+            "error",
+            "Не удалось завершить квест",
+            "☠️",
+            5000
+          );
+        }
+      } catch (error) {
+        console.error('❌ Ошибка завершения квеста:', error);
+        
+        // Откат
+        if (oldBoardId) {
+          await moveTask(taskId, oldBoardId);
+        }
+        
         addNotification(
-          "info",
-          `Квест перемещен в "${boardName}"`,
-          "📦",
-          3000
+          "error",
+          "Не удалось завершить квест",
+          "☠️",
+          5000
         );
-      } else {
-        // Откат изменений при ошибке
+      }
+    } else if (boardName === 'defeat') {
+      // Если перемещаем в defeat - проваливаем задачу (без наград)
+      try {
+        type FailResponse = {
+          message: string;
+          task: {
+            id: string;
+            isFailed: boolean;
+            boardId: string;
+          };
+        };
+
+        const response = await TasksAPI.fail(taskId, newBoardId) as IApiResponse<FailResponse>;
+        
+        if (response.success) {
+          const { task: failedTask } = response.data;
+          
+          // Обновляем задачу в store (backend уже обновил boardId)
+          updateTask(taskId, {
+            isFailed: true,
+            boardId: failedTask.boardId
+          });
+          
+          console.log('💀 Квест провален');
+          
+          // Уведомление о провале
+          addNotification(
+            "error",
+            `💀 Квест провален... Учитесь на ошибках!`,
+            "☠️",
+            5000
+          );
+        } else {
+          // Откат при ошибке
+          if (oldBoardId) {
+            await moveTask(taskId, oldBoardId);
+          }
+          
+          addNotification(
+            "error",
+            "Не удалось провалить квест",
+            "☠️",
+            5000
+          );
+        }
+      } catch (error) {
+        console.error('❌ Ошибка проваливания квеста:', error);
+        
+        // Откат
+        if (oldBoardId) {
+          await moveTask(taskId, oldBoardId);
+        }
+        
+        addNotification(
+          "error",
+          "Не удалось провалить квест",
+          "☠️",
+          5000
+        );
+      }
+    } else {
+      // Обычное перемещение в другую доску (не victory и не defeat)
+      // Оптимистичное обновление UI
+      await moveTask(taskId, newBoardId);
+
+      try {
+        const response = await TasksAPI.update(taskId, { boardId: newBoardId }) as { success: boolean };
+        
+        if (response.success) {
+          console.log('✅ Задача синхронизирована с backend');
+          
+          // Уведомление об успехе
+          addNotification(
+            "info",
+            `Квест перемещен в "${boardName}"`,
+            "📦",
+            3000
+          );
+        } else {
+          // Откат изменений при ошибке
+          if (oldBoardId) {
+            await moveTask(taskId, oldBoardId);
+          }
+          
+          addNotification(
+            "error",
+            "Не удалось синхронизировать квест с сервером",
+            "☠️",
+            5000
+          );
+        }
+      } catch (error) {
+        console.error('❌ Ошибка синхронизации:', error);
+        
+        // Откат изменений
         if (oldBoardId) {
           await moveTask(taskId, oldBoardId);
         }
@@ -107,20 +286,6 @@ const Kanban = () => {
           5000
         );
       }
-    } catch (error) {
-      console.error('❌ Ошибка синхронизации:', error);
-      
-      // Откат изменений
-      if (oldBoardId) {
-        await moveTask(taskId, oldBoardId);
-      }
-      
-      addNotification(
-        "error",
-        "Не удалось синхронизировать квест с сервером",
-        "☠️",
-        5000
-      );
     }
   };
 

@@ -174,8 +174,12 @@ export const TasksAPI = {
     return APIClient.patch(`/api/tasks/${id}`, data);
   },
 
-  async complete(id: string) {
-    return APIClient.post(`/api/tasks/${id}/complete`);
+  async complete(id: string, boardId?: string) {
+    return APIClient.post(`/api/tasks/${id}/complete`, { boardId });
+  },
+
+  async fail(id: string, boardId?: string) {
+    return APIClient.post(`/api/tasks/${id}/fail`, { boardId });
   },
 
   async delete(id: string) {

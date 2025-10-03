@@ -23,14 +23,17 @@ const TaskCard: React.FC<TaskCardProps> = ({
   id,
   dateCreate,
   expiredDate,
-  boardName
+  boardName,
+  isCompleted,
+  isFailed
 }) => {
   const { deleteTaskAsync } = useTasksStore();
   const addNotification = useNotificationStore((state) => state.addNotification);
   const [deleting, setDeleting] = useState(false);
 
   const { setNodeRef, listeners, attributes } = useDraggable({ 
-    id: id ? (typeof id === 'string' ? id : String(id)) : 'temp-id'
+    id: id ? (typeof id === 'string' ? id : String(id)) : 'temp-id',
+    disabled: isCompleted || isFailed  // Отключаем drag для завершенных/проваленных задач
   });
 
   // Проверяем, что id существует и является строкой
@@ -73,10 +76,14 @@ const TaskCard: React.FC<TaskCardProps> = ({
   return (
     <div 
       ref={setNodeRef} 
-      {...listeners}
-      {...attributes}
+      {...(!isCompleted && !isFailed && listeners)}  // Отключаем listeners если задача завершена/провалена
+      {...(!isCompleted && !isFailed && attributes)}  // Отключаем attributes если задача завершена/провалена
       className={getBoardClassName()}
       onClick={handleClick}
+      style={{ 
+        cursor: (isCompleted || isFailed) ? 'not-allowed' : 'grab',
+        opacity: (isCompleted || isFailed) ? 0.9 : 1
+      }}
     >
       <div className={styles.taskCardHeader}>
         <p>{title || 'Без названия'}</p>
