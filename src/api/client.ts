@@ -169,6 +169,10 @@ export const UsersAPI = {
   async getStats(userId: string) {
     return APIClient.get(`/api/users/${userId}/stats`);
   },
+
+  async getAdminStatistics() {
+    return APIClient.get(`/api/users/statistics/admin`);
+  },
 };
 
 /**
